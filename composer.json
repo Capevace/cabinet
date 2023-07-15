@@ -1,0 +1,38 @@
+{
+    "name": "cabinet/cabinet",
+    "description": "description",
+    "minimum-stability": "stable",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Cabinet\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Cabinet\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Lukas Mateffy",
+            "email": "hello@mateffy.me"
+        }
+    ],
+    "require": {
+        "php": "^8.0",
+        "spatie/laravel-package-tools": "^1.15",
+        "illuminate/contracts": "^10.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Cabinet\\CabinetServiceProvider"
+            ],
+            "aliases": {
+                "Cabinet": "Cabinet\\Facades\\Cabinet"
+            }
+        }
+    }
+}
