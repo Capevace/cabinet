@@ -1,4 +1,32 @@
-# Laravel Cabinet
+<div align="center">
+    <img src="resources/images/screenshot.png" alt="Tailpipe logo">
+	<h1>Laravel Cabinet</h1>
+    <h3>Streamlined file management solution, supporting many sources</h3><br />
+	<div>
+		<a 
+			href="https://github.com/Capevace/tailpipe/actions/workflows/test.yml"
+		>
+			<img
+				src="https://github.com/Capevace/tailpipe/actions/workflows/test.yml/badge.svg"
+				alt="Run tests"
+			/>
+		</a>
+		<a href="https://github.com/Capevace/tailpipe/actions/workflows/test.yml">
+			<img
+				src="https://img.shields.io/badge/coverage-100%25-brightgreen"
+				alt="Code coverage - 100%"
+			/>
+		</a>
+		<img
+			src="https://img.shields.io/github/v/release/capevace/tailpipe?include_prereleases"
+			alt="Latest release"
+		/>
+	</div>
+	<h6><em>Made by <a href="https://mateffy.me">Lukas Mateffy</a></em></h6>
+
+</div>
+<br />
+
 
 > Cabinet is a turn-key file management solution for Laravel, that enables attaching files to models. 
 > It integrates various file sources into a streamlined API and user interface (including disks, spatie/media-library, custom database tables, etc).
