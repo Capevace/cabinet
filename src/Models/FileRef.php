@@ -6,6 +6,7 @@ use Cabinet\Cabinet;
 use Cabinet\File;
 use Cabinet\Models\Concerns\WithUuid;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class FileRef extends Model
 {
@@ -28,6 +29,10 @@ class FileRef extends Model
         'path',
     ];
 
+    protected $with = [
+        'model',
+    ];
+
     public function file(): File
     {
         $cabinet = app(Cabinet::class);
@@ -41,5 +46,19 @@ class FileRef extends Model
         if ($this->source !== $source) {
             throw new \LogicException('Source type mismatch');
         }
+    }
+
+    public function references(?File $file): bool
+    {
+        if (!$file) {
+            return false;
+        }
+
+        return $this->file()->uniqueId() === $file->uniqueId();
+    }
+
+    public function model(): MorphTo
+    {
+        return $this->morphTo('model');
     }
 }

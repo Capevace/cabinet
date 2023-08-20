@@ -10,16 +10,23 @@ return new class extends Migration {
         Schema::create('cabinet:file_refs', function (Blueprint $table) {
             $table->uuid('id')->primary();
 
-            $table->uuidMorphs('attached_to');
-            $table->string('attached_as');
+            $table->nullableUuidMorphs('attached_to');
+            $table->string('attached_as')
+                ->nullable();
             $table->unsignedInteger('attached_order')
                 ->nullable();
 
             $table->string('source');
+
             $table->nullableUuidMorphs('model');
-            $table->string('disk')->nullable();
+
+            $table->string('disk')
+                ->nullable();
             $table->string('path', 1024)
                 ->nullable();
+
+            $table->index(['attached_to_type', 'attached_to_id']);
+            $table->index(['source', 'disk', 'path']);
 
             $table->timestamps();
         });

@@ -5,32 +5,25 @@ namespace Cabinet\Types;
 use Cabinet\Types\Concerns\StringableAsSlug;
 use Cabinet\Types\Concerns\UsesDefaultIcon;
 
-class Image implements \Cabinet\FileType
+class PDF implements \Cabinet\FileType
 {
     use StringableAsSlug;
     use UsesDefaultIcon;
 
     public function name(): string
     {
-        return __('cabinet::files.image');
+        return __('cabinet::files.pdf');
     }
 
     public function slug(): string
     {
-        return 'image';
+        return 'pdf';
     }
 
     public static function supportedMimeTypes(): array
     {
         return [
-            'image/jpeg',
-            'image/png',
-            'image/gif',
-            'image/svg+xml',
-            'image/webp',
-            'image/bmp',
-            'image/tiff',
-            'image/x-icon',
+            'application/pdf',
         ];
     }
 }

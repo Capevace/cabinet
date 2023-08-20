@@ -44,7 +44,7 @@ class DiskSource implements \Cabinet\Source
             slug: $filename,
             mimeType: $mimeType,
             size: $this->getDisk()->size($path),
-            url: $this->getDisk()->url($path),
+            previewUrl: $this->getDisk()->url($path),
         );
     }
 
@@ -71,7 +71,7 @@ class DiskSource implements \Cabinet\Source
         // TODO: Implement rename() method.
     }
 
-    public function move(File $file, Directory $directory): File
+    public function move(File $file, Folder $folder): File
     {
         // TODO: Implement move() method.
     }

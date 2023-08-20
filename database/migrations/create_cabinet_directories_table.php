@@ -12,17 +12,23 @@ return new class extends Migration {
 
             $table->string('name');
 
-            $table->foreignUuid('parent_directory_id')
+            $table->timestamps();
+        });
+
+		Schema::table('cabinet:directories', function (Blueprint $table) {
+			$table->foreignUuid('parent_directory_id')
                 ->nullable()
                 ->constrained('cabinet:directories')
                 ->cascadeOnDelete();
-
-            $table->timestamps();
-        });
+		});
     }
 
     public function down(): void
     {
+		Schema::table('cabinet:directories', function (Blueprint $table) {
+			$table->dropForeign(['parent_directory_id']);
+		});
+
         Schema::dropIfExists('cabinet:directories');
     }
 };

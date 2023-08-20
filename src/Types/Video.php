@@ -2,13 +2,17 @@
 
 namespace Cabinet\Types;
 
+use Cabinet\Types\Concerns\StringableAsSlug;
+use Cabinet\Types\Concerns\UsesDefaultIcon;
+
 class Video implements \Cabinet\FileType
 {
-    use \Cabinet\Types\Concerns\StringableAsSlug;
+    use StringableAsSlug;
+    use UsesDefaultIcon;
 
     public function name(): string
     {
-        return __('cabinet::video');
+        return __('cabinet::files.video');
     }
 
     public function slug(): string

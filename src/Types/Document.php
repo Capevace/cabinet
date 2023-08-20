@@ -2,13 +2,17 @@
 
 namespace Cabinet\Types;
 
+use Cabinet\Types\Concerns\StringableAsSlug;
+use Cabinet\Types\Concerns\UsesDefaultIcon;
+
 class Document implements \Cabinet\FileType
 {
-    use \Cabinet\Types\Concerns\StringableAsSlug;
+    use StringableAsSlug;
+    use UsesDefaultIcon;
 
     public function name(): string
     {
-        return __('cabinet::document');
+        return __('cabinet::files.document');
     }
 
     public function slug(): string
@@ -19,7 +23,21 @@ class Document implements \Cabinet\FileType
     public static function supportedMimeTypes(): array
     {
         return [
-            'application/pdf',
+            // Text file
+            'text/plain',
+
+            // CSV
+            'text/csv',
+            'text/x-csv',
+            'application/csv',
+
+            // JSON
+            'application/json',
+            'application/x-json',
+
+            // XML
+            'application/xml',
+            'text/xml',
 
             // Microsoft Office
             'application/msword',

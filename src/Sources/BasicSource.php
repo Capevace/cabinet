@@ -26,7 +26,7 @@ class BasicSource implements \Cabinet\Source
             slug: $media->slug,
             mimeType: $media->mime_type,
             size: $media->size,
-            url: $media->getFullUrl(),
+            previewUrl: $media->getFullUrl(),
         );
     }
 
@@ -74,7 +74,7 @@ class BasicSource implements \Cabinet\Source
         return $file;
     }
 
-    public function move(File $file, Directory $directory): File
+    public function move(File $file, Folder $folder): File
     {
         return $file;
     }

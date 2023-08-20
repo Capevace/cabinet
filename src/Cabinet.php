@@ -2,14 +2,22 @@
 
 namespace Cabinet;
 
-use Cabinet\Models\Directory;
+use Cabinet\Services\Actions;
+use Cabinet\Services\Directories;
+use Cabinet\Services\Files;
+use Cabinet\Services\References;
 use Cabinet\Sources\SpatieMediaSource;
+use Cabinet\Types\Document;
 use Cabinet\Types\Image;
+use Cabinet\Types\Other;
+use Cabinet\Types\PDF;
 use Cabinet\Types\Video;
 use Illuminate\Support\Collection;
 
 class Cabinet
 {
+    use Actions, Directories, Files, References;
+
     protected $sources = [
         SpatieMediaSource::TYPE => SpatieMediaSource::class,
     ];
@@ -17,6 +25,9 @@ class Cabinet
     protected $fileTypes = [
         Image::class,
         Video::class,
+        Document::class,
+        PDF::class,
+        Other::class
     ];
 
     public function registerSource(string $name, string $className): self
@@ -27,6 +38,8 @@ class Cabinet
         }
 
         $this->sources[$name] = $className;
+
+        app()->singleton($className);
 
         return $this;
     }
@@ -40,6 +53,41 @@ class Cabinet
         return app($this->sources[$source]);
     }
 
+    public function validSources(): Collection
+    {
+        return collect($this->sources)->keys();
+    }
+
+    protected function mapSources(?array $sourceNames = null): Collection
+    {
+        $sourceNames = $sourceNames ?? array_keys($this->sources);
+
+        return collect($sourceNames)
+            ->map(fn (string $source) => $this->getSource($source));
+    }
+
+
+
+    /**
+     * @return Collection<FileType>
+     */
+    public function validFileTypes(): Collection
+    {
+        return collect($this->fileTypes)
+            ->map(fn (string $classPath) => app($classPath));
+    }
+
+    public function registerFileType(string $classPath): self
+    {
+        if (!in_array(FileType::class, class_implements($classPath))) {
+            throw new \Exception("{$classPath} must implement " . FileType::class);
+        }
+
+        $this->fileTypes[] = $classPath;
+
+        return $this;
+    }
+
     public function determineFileTypeFromMime(string $mime): FileType
     {
         foreach ($this->fileTypes as $fileType) {
@@ -48,77 +96,6 @@ class Cabinet
             }
         }
 
-        throw new \Exception("Could not determine file type for mime {$mime}");
-    }
-
-    /**
-     * @return Collection<File|Folder>
-     */
-    public function all(Folder $folder, ?array $sourceNames = null): Collection
-    {
-        $sourceNames = $sourceNames ?? array_keys($this->sources);
-
-        $files = collect($sourceNames)
-            ->map(fn (string $source) => $this->getSource($source))
-            ->map(fn (Source $source) => $source->all($folder))
-            ->flatten();
-
-        if ($folder->isCabinetFolder()) {
-            $subdirs = $this->findCabinetDirectory($folder->id)
-                ->directories
-                ->map(fn (Directory $directory) => new Folder(
-                    id: $directory->id,
-                    source: 'cabinet',
-                    name: $directory->name,
-                ));
-
-            $files = $files
-                ->merge($subdirs);
-        }
-
-
-        return $files;
-    }
-
-    public function move(File $file, Directory $directory): self
-    {
-        $source = $this->getSource($file->source);
-
-        $source->move($file, $directory);
-
-        return $this;
-    }
-
-    public function rename(File $file, string $name): self
-    {
-        $source = $this->getSource($file->source);
-
-        $source->rename($file, $name);
-
-        return $this;
-    }
-
-    public function delete(File $file): self
-    {
-        $source = $this->getSource($file->source);
-
-        $source->delete($file);
-
-        return $this;
-    }
-
-    public function getDirectoryMorphClass(): string
-    {
-        $className = config('cabinet.directory_model');
-        $dir = new $className;
-
-        return $dir->getMorphClass();
-    }
-
-    public function findCabinetDirectory(string $id)
-    {
-        $className = config('cabinet.directory_model');
-
-        return $className::find($id);
+        return app(Other::class);
     }
 }

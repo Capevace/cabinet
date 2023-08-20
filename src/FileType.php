@@ -8,6 +8,8 @@ interface FileType
 
     public function slug(): string;
 
+    public function icon(): string;
+
     public function __toString(): string;
 
     public static function supportedMimeTypes(): array;
