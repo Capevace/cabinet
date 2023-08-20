@@ -4,21 +4,21 @@
     <h3>Streamlined file management solution, integrating multiple sources</h3><br />
 	<div>
 		<a 
-			href="https://github.com/Capevace/tailpipe/actions/workflows/test.yml"
+			href="https://github.com/Capevace/cabinet/actions/workflows/test.yml"
 		>
 			<img
-				src="https://github.com/Capevace/tailpipe/actions/workflows/test.yml/badge.svg"
+				src="https://github.com/Capevace/cabinet/actions/workflows/test.yml/badge.svg"
 				alt="Run tests"
 			/>
 		</a>
-		<a href="https://github.com/Capevace/tailpipe/actions/workflows/test.yml">
+		<a href="https://github.com/Capevace/cabinet/actions/workflows/test.yml">
 			<img
 				src="https://img.shields.io/badge/coverage-100%25-brightgreen"
 				alt="Code coverage - 100%"
 			/>
 		</a>
 		<img
-			src="https://img.shields.io/github/v/release/capevace/tailpipe?include_prereleases"
+			src="https://img.shields.io/github/v/release/capevace/cabinet?include_prereleases"
 			alt="Latest release"
 		/>
 	</div>
