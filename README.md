@@ -31,6 +31,8 @@
 > Cabinet is a turn-key file management solution for Laravel, that enables attaching files to models. 
 > It integrates various file sources into a streamlined API and user interface (including disks, spatie/media-library, custom database tables, etc).
 
+<br><br>
+
 ## Motivation
 
 While building an application, I needed a solution to make uploaded files browsable and selectable inside a 
@@ -42,6 +44,8 @@ select a 3D-Scan of a building in the same way as a floor plan or its photo, eve
 accessible via API and is only referenced via custom table in our app.
 
 **Cabinet** is the solution I came up with that allows to manage files from different sources in a single, unified way.
+
+<br><br>
 
 ## How it works
 
@@ -91,6 +95,8 @@ php artisan cabinet:install
 ```
 
 You're all done! You can now start using Cabinet.
+
+<br><br>
 
 ## Getting started
 
