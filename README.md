@@ -35,7 +35,7 @@ custom database tables, etc).**
 <br>
 
 <details>
-  <summary>Screenshots</summary>
+  <summary><h2>Screenshots</h2></summary>
   
   <img src="resources/images/screenshot.png" alt="Tailpipe logo">
   
