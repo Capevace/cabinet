@@ -31,6 +31,10 @@
 > Cabinet is a turn-key file management solution for Laravel, that enables attaching files to models. 
 > It integrates various file sources into a streamlined API and user interface (including disks, spatie/media-library, custom database tables, etc).
 
+> [!WARNING]  
+> Cabinet is currently in **alpha**. While it is stable and is used in production internally, the API may still be 
+> subject to change until version 1.0 is released.
+
 <br><br>
 
 ## Motivation
@@ -82,11 +86,7 @@ The following command will install the cabinet core package and the UI package. 
 composer require capevace/cabinet capevace/cabinet-ui
 ```
 
-If you want to completely build your own UI and just use Cabinet headlessly, you can omit the UI package:
-
-```bash
-composer require capevace/cabinet
-```
+If you want to completely build your own UI and just use Cabinet headlessly, you can omit the `capevace/cabinet-ui` package.
 
 ### Run the install command to publish the config and migrations
 
