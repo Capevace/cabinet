@@ -32,6 +32,8 @@
 It integrates various file sources into a streamlined API and user interface (including disks, spatie/media-library, 
 custom database tables, etc).**
 
+<br>
+
 > [!WARNING]  
 > Cabinet is currently in **alpha**. While it is stable and is used in production internally, the API may still be 
 > subject to change until version 1.0 is released.
