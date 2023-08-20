@@ -72,6 +72,8 @@ managed by Cabinet itself and are stored in the `cabinet:directories` database t
 (We use "Directory" for the raw model / DB data and "Folder" throughout the rest of the code, in order to be able to
 differentiate between the two).
 
+<br><br>
+
 ## Installation 
 
 The following command will install the cabinet core package and the UI package. The pre-built UI is made with [Filament](https://filamentphp.com) and is technically optional, but recommended.
@@ -278,6 +280,7 @@ $post->thumbnail()->create($file->getReferenceData());
 Cabinet::attach($files, to: $post, as: 'gallery_images');
 ```
 
+<br><br>
 
 ## Concepts
 
