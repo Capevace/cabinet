@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="resources/images/screenshot.png"   alt="Tailpipe logo">
+    <img src="resources/images/screenshot.png" alt="Tailpipe logo">
 	<h1>Laravel Cabinet</h1>
     <h3>Streamlined file management solution, integrating multiple sources</h3><br />
 	<div>
@@ -37,6 +37,15 @@ custom database tables, etc).**
 > [!WARNING]  
 > Cabinet is currently in **alpha**. While it is stable and is used in production internally, the API may still be 
 > subject to change until version 1.0 is released.
+
+<br><br>
+
+<details>
+  <summary>Screenshots</summary>
+  
+  <img src="resources/images/screenshot.png" alt="Tailpipe logo">
+  
+</details>
 
 <br><br>
 
