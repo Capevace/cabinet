@@ -34,18 +34,18 @@ custom database tables, etc).**
 
 <br>
 
-> [!WARNING]  
-> Cabinet is currently in **alpha**. While it is stable and is used in production internally, the API may still be 
-> subject to change until version 1.0 is released.
-
-<br><br>
-
 <details>
   <summary>Screenshots</summary>
   
   <img src="resources/images/screenshot.png" alt="Tailpipe logo">
   
 </details>
+
+<br>
+
+> [!WARNING]  
+> Cabinet is currently in **alpha**. While it is stable and is used in production internally, the API may still be 
+> subject to change until version 1.0 is released.
 
 <br><br>
 
