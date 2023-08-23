@@ -1,6 +1,6 @@
 {
     "name": "capevace/cabinet",
-    "description": "description",
+    "description": "Cabinet is a turn-key file management solution for Laravel, that enables attaching files and folders to models, by integrating various file sources into a streamlined API and user interface.",
     "minimum-stability": "stable",
     "type": "library",
     "license": "MIT",
