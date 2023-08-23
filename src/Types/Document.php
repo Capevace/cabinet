@@ -4,15 +4,19 @@ namespace Cabinet\Types;
 
 use Cabinet\Types\Concerns\StringableAsSlug;
 use Cabinet\Types\Concerns\UsesDefaultIcon;
+use Cabinet\Types\Concerns\WithMime;
 
 class Document implements \Cabinet\FileType
 {
     use StringableAsSlug;
     use UsesDefaultIcon;
+    use WithMime;
 
     public function name(): string
     {
-        return __('cabinet::files.document');
+        return ($mime = $this->formattedMimeType())
+            ? __('cabinet::files.document') . " ({$mime})"
+            : __('cabinet::files.document');
     }
 
     public function slug(): string
@@ -41,6 +45,7 @@ class Document implements \Cabinet\FileType
 
             // Microsoft Office
             'application/msword',
+            'application/vnd.ms-word',
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
             'application/vnd.ms-excel',
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -55,23 +60,6 @@ class Document implements \Cabinet\FileType
             'application/vnd.oasis.opendocument.database',
             'application/vnd.oasis.opendocument.formula',
             'application/vnd.oasis.opendocument.image',
-            'application/vnd.oasis.opendocument.text-master',
-            'application/vnd.oasis.opendocument.text-template',
-            'application/vnd.oasis.opendocument.spreadsheet-template',
-            'application/vnd.oasis.opendocument.presentation-template',
-            'application/vnd.oasis.opendocument.graphics-template',
-            'application/vnd.oasis.opendocument.chart-template',
-            'application/vnd.oasis.opendocument.image-template',
-            'application/vnd.oasis.opendocument.formula-template',
-            'application/vnd.oasis.opendocument.text-web',
-            'application/vnd.oasis.opendocument.text-flat-xml',
-            'application/vnd.oasis.opendocument.spreadsheet-flat-xml',
-            'application/vnd.oasis.opendocument.presentation-flat-xml',
-            'application/vnd.oasis.opendocument.graphics-flat-xml',
-            'application/vnd.oasis.opendocument.chart-flat-xml',
-            'application/vnd.oasis.opendocument.image-flat-xml',
-            'application/vnd.oasis.opendocument.formula-flat-xml',
-            'application/vnd.oasis.opendocument.text-master-template',
             'application/vnd.sun.xml.writer',
             'application/vnd.sun.xml.writer.template',
             'application/vnd.sun.xml.calc',
@@ -98,5 +86,63 @@ class Document implements \Cabinet\FileType
             'application/x-iwork-numbers-sffnumbers',
             'application/x-iwork-keynote-sffkey',
         ];
+    }
+
+    public function formattedMimeType(): ?string
+    {
+        return match ($this->mime) {
+            'text/plain' => 'TXT',
+
+            'text/csv',
+            'text/x-csv',
+            'application/csv' => 'CSV',
+
+            'application/json',
+            'application/x-json' => 'JSON',
+
+            'application/xml',
+            'text/xml' => 'XML',
+
+            'application/msword' => 'DOC',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => 'DOCX',
+            'application/vnd.ms-excel' => 'XLS',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => 'XLSX',
+            'application/vnd.ms-powerpoint' => 'PPT',
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation' => 'PPTX',
+
+            'application/vnd.oasis.opendocument.text' => 'ODT',
+            'application/vnd.oasis.opendocument.spreadsheet' => 'ODS',
+            'application/vnd.oasis.opendocument.presentation' => 'ODP',
+            'application/vnd.oasis.opendocument.graphics' => 'ODG',
+            'application/vnd.oasis.opendocument.chart' => 'ODC',
+            'application/vnd.oasis.opendocument.database' => 'ODB',
+            'application/vnd.oasis.opendocument.formula' => 'ODF',
+            'application/vnd.oasis.opendocument.image' => 'ODI',
+
+            'application/vnd.sun.xml.writer' => 'SXW',
+            'application/vnd.sun.xml.writer.template' => 'STW',
+            'application/vnd.sun.xml.calc' => 'SXC',
+            'application/vnd.sun.xml.calc.template' => 'STC',
+            'application/vnd.sun.xml.draw' => 'SXD',
+            'application/vnd.sun.xml.draw.template' => 'STD',
+            'application/vnd.sun.xml.impress' => 'SXI',
+            'application/vnd.sun.xml.impress.template' => 'STI',
+            'application/vnd.sun.xml.writer.global' => 'SXI',
+            'application/vnd.sun.xml.math' => 'SXM',
+            'application/vnd.stardivision.writer' => 'SDW',
+            'application/vnd.stardivision.writer-global' => 'SGW',
+            'application/vnd.stardivision.calc' => 'SDC',
+            'application/vnd.stardivision.impress' => 'SDD',
+            'application/vnd.stardiv' => 'SDF',
+
+            'application/vnd.apple.pages',
+            'application/x-iwork-pages-sffpages' => 'Apple Pages',
+            'application/vnd.apple.numbers',
+            'application/x-iwork-numbers-sffnumbers' => 'Apple Numbers',
+            'application/vnd.apple.keynote',
+            'application/x-iwork-keynote-sffkey' => 'Apple Keynote',
+
+            default => $this->mime,
+        };
     }
 }

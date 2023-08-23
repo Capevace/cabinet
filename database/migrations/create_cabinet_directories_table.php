@@ -12,6 +12,12 @@ return new class extends Migration {
 
             $table->string('name');
 
+            $table->string('translation_key')
+                ->nullable();
+
+            $table->boolean('is_protected')
+                ->default(false);
+
             $table->timestamps();
         });
 

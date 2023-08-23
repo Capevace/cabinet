@@ -66,7 +66,7 @@ accessible via API and is only referenced via custom table in our app.
 ## How it works
 
 File management is complicated! So in order to use Cabinet, it helps to have a basic understanding of how it works.
-Cabinet is built around the concept of **sources**, **folders**, **files** and **file references**.
+Cabinet is built around the concept of **sources**, **folders**, **files**, **file types** and **file references**.
 
 ### Sources
 
@@ -88,7 +88,40 @@ managed by Cabinet itself and are stored in the `cabinet:directories` database t
 (We use "Directory" for the raw model / DB data and "Folder" throughout the rest of the code, in order to be able to
 differentiate between the two).
 
-<br><br>
+### Files
+
+A `File` is a unified data structure that represents a file. It contains the file's metadata, such as its name, size,
+and file type. It also contains everything required to resolve the file's data: its source the file's identifier.
+These can be used to access a file's URL or its contents by calling the associated source through Cabinet.
+
+### File types
+
+A `FileType` is a class that is responsible for determining the type of a file. Cabinet comes with a few built-in file
+types, such as `Image`, `Video`, `Audio`, `Document`, etc. These file types unify many different file extensions and
+mime types into a single type. For example, the `Image` file type will match all image files, such as `.jpg`, `.png`,
+`.gif`, etc. and will also match the `image/jpeg`, `image/png`, `image/gif` mime types.
+
+This makes it much easier to deal with files, as you don't have to worry about all the different file extensions and
+mime types. You can simply check if a file is an `Image` and Cabinet will take care of the rest. However,
+you can can still access the file's raw mime type and extension if you want to limit selection / uploads.
+
+You can also create your own file types for your custom models by implementing the `FileType` interface. 
+[Learn more about creating file types](#creating-file-types) or look at some [examples](#built-in-file-types).
+
+### File references
+
+A `FileRef` is a model that is used to reference a file from a model. It uses a polymorphic relationship to reference
+the model to attach files to and stores the file's ID and source in order to retrieve it. This allows you to attach 
+files to any model in your application without needing pivot tables or other complex structures. However, `FileRef`'s 
+have a UUID and nullable model columns, so you can also use your foreign key constraints if you want to create stronger
+couplings.  
+
+It also stores the name of the relationship that is used to access the file. This allows you to attach multiple different
+files to a model, such as a thumbnail and a gallery, without having to worry about naming conflicts.
+
+In addition, it also contains an order column, which allows saving multiple files in a specific order under a single
+relationship.
+
 
 ## Installation 
 

@@ -3,6 +3,7 @@
 namespace Cabinet\Sources;
 
 use Cabinet\Exceptions\FileNotFound;
+use Cabinet\Exceptions\FileStillReferenced;
 use Cabinet\Exceptions\WrongSource;
 use Cabinet\Facades\Cabinet;
 use Cabinet\File;
@@ -28,6 +29,16 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
 {
     public const TYPE = 'spatie-media';
 
+    protected function getThumbnailConversion(): string
+    {
+        return config('cabinet.spatie_media_library.preview_conversion') ?? '';
+    }
+
+    protected function getDefaultConversion(): string
+    {
+        return config('cabinet.spatie_media_library.default_conversion') ?? '';
+    }
+
     protected function findMediaOrFail(File $file): Media
     {
         $mediaModel = $this->getMediaModel();
@@ -42,6 +53,8 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
 
     protected function transformMedia(Media $media): File
     {
+        $thumbnailConversion = $this->getThumbnailConversion();
+
         return new File(
             id: (string) $media->getKey(),
             source: self::TYPE,
@@ -50,7 +63,9 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
             slug: $media->file_name,
             mimeType: $media->mime_type,
             size: $media->size,
-            previewUrl: $media->getFullUrl(config('cabinet.spatie_media_library.preview_conversion') ?? ''),
+            previewUrl: $media->hasGeneratedConversion($thumbnailConversion)
+                ? $media->getFullUrl($thumbnailConversion)
+                : $media->getFullUrl(),
         );
     }
 
@@ -95,6 +110,10 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
 
         $media = $ref->model;
 
+        if ($media === null) {
+            throw new FileNotFound("Media with ID {$ref->model_id} could not be found");
+        }
+
         return $this->transformMedia($media);
     }
 
@@ -127,6 +146,15 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
 
     public function delete(File $file): void
     {
+        $refs = $this->references($file);
+        $deleteRefs = config('cabinet.auto_delete_references', true);
+
+        if ($refs->isNotEmpty() && !$deleteRefs) {
+            throw new FileStillReferenced('Cannot delete media file that is still referenced');
+        } else if ($refs->isNotEmpty() && $deleteRefs) {
+            $refs->each->delete();
+        }
+
         $media = $this->findMediaOrFail($file);
         $media->delete();
     }
@@ -201,7 +229,7 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
     {
         $media = $this->findMediaOrFail($file);
 
-        return $media->getFullUrl($variant ?? '');
+        return $media->getFullUrl($variant ?? $this->getDefaultConversion());
     }
 
     public function getFileModel(File $file): Model
@@ -213,7 +241,7 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
     {
         $media = $this->findMediaOrFail($file);
 
-        return $media->getPath();
+        return $media->getPath($this->getDefaultConversion());
     }
 
     public function contents(File $file): string
@@ -225,6 +253,6 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
     {
         $media = $this->findMediaOrFail($file);
 
-        return response()->download($media->getPath(), $media->file_name);
+        return response()->download($media->getPath($this->getDefaultConversion()), $media->file_name);
     }
 }

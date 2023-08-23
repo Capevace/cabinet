@@ -2,14 +2,25 @@
 
 namespace Cabinet\Models;
 
+use Cabinet\Facades\Cabinet;
 use Cabinet\Folder;
 use Cabinet\Models\Concerns\WithUuid;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
+/**
+ * @property-read string $id
+ * @property string $name
+ * @property string $parent_directory_id
+ * @property Directory $parentDirectory
+ * @property Collection<Directory> $directories
+ * @property string $translation_key
+ * @property bool $is_protected
+ */
 class Directory extends Model implements HasMedia
 {
     use WithUuid, InteractsWithMedia;
@@ -18,7 +29,6 @@ class Directory extends Model implements HasMedia
 
     protected $fillable = [
         'name',
-
         'parent_directory_id',
     ];
 
@@ -37,7 +47,9 @@ class Directory extends Model implements HasMedia
         return new Folder(
             id: $this->id,
             source: 'cabinet',
-            name: $this->name,
+            name: $this->translation_key
+                ? trans_choice($this->translation_key, 9999)
+                : $this->name,
         );
     }
 
@@ -52,28 +64,11 @@ class Directory extends Model implements HasMedia
             $this->addMediaConversion($conversion)
                 ->width(400)
                 ->background('transparent')
-                ->keepOriginalImageFormat();
+                ->format('jpg')
+                ->quality(85)
+                ->pdfPageNumber(1);
         }
 
-        $this->addMediaConversion('thumbnail')
-              ->width(256)
-              ->height(256)
-              ->format('jpg')
-              ->quality(80)
-              ->pdfPageNumber(1);
-
-        $this->addMediaConversion('medium')
-            ->fit(Manipulations::FIT_CONTAIN, width: 640, height: 360) // 16:9
-            ->format('jpg');
-
-        $this->addMediaConversion('large')
-            ->height(1200)
-            ->quality(80)
-            ->format('jpg');
-
-        $this->addMediaConversion('mini-square')
-            ->crop(Manipulations::CROP_CENTER, 256, 256)
-            ->border(20, '#fff', 'shrink')
-            ->format('jpg');
+        Cabinet::callConfigureMediaConversions($this, $media);
     }
 }

@@ -11,6 +11,16 @@ use Illuminate\Support\Collection;
 
 trait Directories
 {
+    public function folder(Directory|string $directory): ?Folder
+    {
+        $id = $directory instanceof Directory
+            ? $directory->id
+            : $directory;
+
+        return static::directory($id)
+            ?->asFolder();
+    }
+
     public function directory(Folder|string $directory): ?Directory
     {
         $className = config('cabinet.directory_model');
@@ -22,24 +32,7 @@ trait Directories
         return $className::find($id);
     }
 
-    public function folder(Directory|string $directory): ?Folder
-    {
-        $id = $directory instanceof Directory
-            ? $directory->id
-            : $directory;
-
-        return static::directory($id)
-            ?->asFolder();
-    }
-
-    public function findCabinetDirectory(string $id)
-    {
-        $className = config('cabinet.directory_model');
-
-        return $className::find($id);
-    }
-
-    public function createDirectory(string $name, Folder|Directory|null $parent = null): Directory
+    public function createDirectory(string $name, Folder|Directory|null $parent = null, bool $protected = false, ?string $translationKey = null): Directory
     {
         if ($parent instanceof Folder && !$parent->isCabinetFolder()) {
             throw new WrongSource('Cannot create directory in non-cabinet parent folder');
@@ -47,13 +40,22 @@ trait Directories
 
         $className = config('cabinet.directory_model');
 
-        return $className::create([
+        $directory = $className::make([
             'name' => $name,
             'parent_directory_id' => $parent?->id
         ]);
+        $directory->is_protected = $protected;
+
+        if ($translationKey) {
+            $directory->translation_key = $translationKey;
+        }
+
+        $directory->save();
+
+        return $directory;
     }
 
-    public function findOrCreateDirectory(string $id, string $name, Folder|Directory|null $parent = null): Directory
+    public function findOrCreateDirectory(string $id, string $name, Folder|Directory|null $parent = null, bool $protected = false, ?string $translationKey = null): Directory
     {
         if ($parent instanceof Folder && !$parent->isCabinetFolder()) {
             throw new WrongSource('Cannot create directory in non-cabinet parent folder');
@@ -72,9 +74,14 @@ trait Directories
                 'parent_directory_id' => $parent?->id
             ]
         );
+        $directory->is_protected = $protected;
 
         if ($id) {
             $directory->id = $id;
+        }
+
+        if ($translationKey) {
+            $directory->translation_key = $translationKey;
         }
 
         $directory->save();
@@ -100,13 +107,13 @@ trait Directories
             : $directory;
 
         $files = $this->mapSources($sourceNames)
-            ->map(fn (Source $source) => $source->all($folder))
+            ->map(fn(Source $source) => $source->all($folder))
             ->flatten();
 
         if ($folder->isCabinetFolder()) {
             $subdirs = $this->findCabinetDirectory($folder->id)
                 ->directories
-                ->map(fn (Directory $directory) => new Folder(
+                ->map(fn(Directory $directory) => new Folder(
                     id: $directory->id,
                     source: 'cabinet',
                     name: $directory->name,
@@ -118,5 +125,12 @@ trait Directories
 
 
         return $files;
+    }
+
+    public function findCabinetDirectory(string $id)
+    {
+        $className = config('cabinet.directory_model');
+
+        return $className::find($id);
     }
 }

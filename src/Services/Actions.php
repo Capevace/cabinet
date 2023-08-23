@@ -39,16 +39,21 @@ trait Actions
     public function rename(File|Directory|Folder $file, string $name): self
     {
         if ($file instanceof Directory && $file->isCabinetDirectory()) {
+            abort_if($file->is_protected, 403);
+
             $file->update([
                 'name' => $name,
             ]);
 
             return $this;
         } else if ($file instanceof Folder && $file->isCabinetFolder()) {
-            $file->findDirectoryOrFail()
-                ->update([
-                    'name' => $name,
-                ]);
+            $directory = $file->findDirectoryOrFail();
+
+            abort_if($directory->is_protected, 403);
+
+            $directory->update([
+                'name' => $name,
+            ]);
 
             return $this;
         }
@@ -63,12 +68,17 @@ trait Actions
     public function delete(File|Folder|Directory $file): self
     {
         if ($file instanceof Directory && $file->isCabinetDirectory()) {
+            abort_if($file->is_protected, 403);
+
             $file->delete();
 
             return $this;
         } else if ($file instanceof Folder && $file->isCabinetFolder()) {
-            $file->findDirectoryOrFail()
-                ->delete();
+            $directory = $file->findDirectoryOrFail();
+
+            abort_if($directory->is_protected, 403);
+
+            $directory->delete();
 
             return $this;
         }

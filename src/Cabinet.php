@@ -2,17 +2,23 @@
 
 namespace Cabinet;
 
+use Cabinet\Models\Directory;
 use Cabinet\Services\Actions;
 use Cabinet\Services\Directories;
 use Cabinet\Services\Files;
 use Cabinet\Services\References;
 use Cabinet\Sources\SpatieMediaSource;
+use Cabinet\Types\Audio;
 use Cabinet\Types\Document;
 use Cabinet\Types\Image;
 use Cabinet\Types\Other;
 use Cabinet\Types\PDF;
 use Cabinet\Types\Video;
+use Closure;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Cabinet
 {
@@ -25,10 +31,13 @@ class Cabinet
     protected $fileTypes = [
         Image::class,
         Video::class,
+        Audio::class,
         Document::class,
         PDF::class,
         Other::class
     ];
+
+    protected Closure|null $configureMediaConversions = null;
 
     public function registerSource(string $name, string $className): self
     {
@@ -92,10 +101,25 @@ class Cabinet
     {
         foreach ($this->fileTypes as $fileType) {
             if (array_search($mime, $fileType::supportedMimeTypes()) !== false) {
-                return app($fileType);
+                return app($fileType, ['mime' => $mime]);
             }
         }
 
         return app(Other::class);
+    }
+
+
+    public function configureMediaConversionsUsing(Closure $callback): self
+    {
+        $this->configureMediaConversions = $callback;
+
+        return $this;
+    }
+
+    public function callConfigureMediaConversions(HasMedia $directory, ?Media $media = null): void
+    {
+        if ($this->configureMediaConversions !== null) {
+            $this->configureMediaConversions->call($directory, $directory, $media);
+        }
     }
 }

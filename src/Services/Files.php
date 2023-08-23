@@ -25,7 +25,6 @@ trait Files
             $supportsIdLookup = in_array(FindWithId::class, $interfaces);
             $supportsPathLookup = in_array(FindWithPath::class, $interfaces);
 
-
             if (!$supportsIdLookup && !$supportsPathLookup) {
                 throw new WrongSource("{$sourceName} source does not implement file lookup");
             } else if ($disk === null && !$supportsIdLookup) {
@@ -33,7 +32,6 @@ trait Files
             } else if ($disk !== null && !$supportsPathLookup) {
                 throw new WrongSource("{$sourceName} source does not support path lookup");
             }
-
 
             if ($supportsIdLookup) {
                 /** @var FindWithId $source */
