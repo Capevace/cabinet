@@ -51,7 +51,7 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
         return $media;
     }
 
-    protected function transformMedia(Media $media): File
+    public function transformMedia(Media $media): File
     {
         $thumbnailConversion = $this->getThumbnailConversion();
 
