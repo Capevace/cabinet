@@ -19,4 +19,9 @@ trait WithMime
             default => $this->mime,
         };
     }
+
+    public function getMime(): ?string
+    {
+        return $this->mime;
+    }
 }

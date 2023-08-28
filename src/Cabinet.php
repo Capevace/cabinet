@@ -108,6 +108,19 @@ class Cabinet
         return app(Other::class);
     }
 
+    public function makeFileType(string $slug, ?string $mime = null): ?FileType
+    {
+        foreach ($this->fileTypes as $fileTypeClass) {
+            $type = app($fileTypeClass, ['mime' => $mime]);
+
+            if ($type->slug() === $slug) {
+                return $type;
+            }
+        }
+
+        return null;
+    }
+
 
     public function configureMediaConversionsUsing(Closure $callback): self
     {

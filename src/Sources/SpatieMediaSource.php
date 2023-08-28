@@ -228,7 +228,7 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
     public function generateUrl(File $file, ?string $variant = null): ?string
     {
         $media = $this->findMediaOrFail($file);
-
+        
         return $media->getFullUrl($variant ?? $this->getDefaultConversion());
     }
 

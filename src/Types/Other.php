@@ -5,8 +5,9 @@ namespace Cabinet\Types;
 use Cabinet\Types\Concerns\StringableAsSlug;
 use Cabinet\Types\Concerns\UsesDefaultIcon;
 use Cabinet\Types\Concerns\WithMime;
+use Cabinet\Types\Contracts\HasMime;
 
-class Other implements \Cabinet\FileType
+class Other implements \Cabinet\FileType, HasMime
 {
     use StringableAsSlug;
     use UsesDefaultIcon;
