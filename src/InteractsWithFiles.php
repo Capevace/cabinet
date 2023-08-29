@@ -39,4 +39,10 @@ trait InteractsWithFiles
         return $morphMany
             ->orderBy('attached_order');
     }
+
+    public function all_file_refs(): MorphMany
+	{
+		return $this->morphMany(FileRef::class, 'attached_to')
+			->orderBy('attached_order');
+	}
 }
