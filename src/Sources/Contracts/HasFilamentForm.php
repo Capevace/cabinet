@@ -2,7 +2,9 @@
 
 namespace Cabinet\Sources\Contracts;
 
-interface HasFilamentForm extends AcceptsData
+interface HasFilamentForm
 {
     public function getFormSchema(): array;
+
+
 }

@@ -9,6 +9,9 @@ use Illuminate\Support\Collection;
 
 interface Source
 {
+    public static function type(): string;
+    public static function label(): string;
+
     /**
      * @return Collection<File|Folder>
      */

@@ -4,7 +4,7 @@ namespace Cabinet\Sources\Contracts;
 
 use Illuminate\View\View;
 
-interface HasCustomForm extends AcceptsData
+interface HasCustomForm
 {
     public function getFormView(): View;
 

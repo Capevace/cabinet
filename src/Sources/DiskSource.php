@@ -19,6 +19,16 @@ class DiskSource implements \Cabinet\Source
 
     public string $prefix = 'cabinet/';
 
+    public static function type(): string
+    {
+        return static::TYPE;
+    }
+
+    public static function label(): string
+    {
+        return __('cabinet::files.files');
+    }
+
     protected function getDisk(?string $disk = null): \Illuminate\Contracts\Filesystem\Filesystem
     {
         return Storage::disk($disk ?? $this->disk);

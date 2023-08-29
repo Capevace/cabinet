@@ -16,6 +16,16 @@ class BasicSource implements \Cabinet\Source
 {
     public const TYPE = 'basic';
 
+    public static function type(): string
+    {
+        return static::TYPE;
+    }
+
+    public static function label(): string
+    {
+        return __('cabinet::files.files');
+    }
+
     protected function transformMedia(Media $media): File
     {
         return new File(

@@ -6,6 +6,7 @@ use Cabinet\Exceptions\FileNotFound;
 use Cabinet\Exceptions\FileStillReferenced;
 use Cabinet\Exceptions\WrongSource;
 use Cabinet\Facades\Cabinet;
+use Cabinet\Filament\Livewire\Finder\Actions\UploadFile;
 use Cabinet\File;
 use Cabinet\FileType;
 use Cabinet\Folder;
@@ -16,18 +17,32 @@ use Cabinet\Sources\Contracts\CanBeDownloaded;
 use Cabinet\Sources\Contracts\CanGenerateUrls;
 use Cabinet\Sources\Contracts\FindWithId;
 use Cabinet\Sources\Contracts\HasContents;
+use Cabinet\Sources\Contracts\HasFilamentForm;
 use Cabinet\Sources\Contracts\HasPath;
 use Cabinet\Sources\Contracts\HasModel;
+use Filament\Forms\Components\FileUpload;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
+use League\Flysystem\UnableToCheckFileExistence;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 
 class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, CanGenerateUrls, HasModel, HasPath, HasContents, CanBeDownloaded
 {
     public const TYPE = 'spatie-media';
+
+    public static function type(): string
+    {
+        return static::TYPE;
+    }
+
+    public static function label(): string
+    {
+        return __('cabinet::files.files');
+    }
 
     protected function getThumbnailConversion(): string
     {
@@ -228,7 +243,7 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
     public function generateUrl(File $file, ?string $variant = null): ?string
     {
         $media = $this->findMediaOrFail($file);
-        
+
         return $media->getFullUrl($variant ?? $this->getDefaultConversion());
     }
 
@@ -254,5 +269,38 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
         $media = $this->findMediaOrFail($file);
 
         return response()->download($media->getPath($this->getDefaultConversion()), $media->file_name);
+    }
+
+    public function getFormSchema(): array
+    {
+        $source = $this;
+        return [
+            FileUpload::make('files')
+                ->label('Files')
+                ->multiple()
+                ->saveUploadedFileUsing(function (Cabinet $cabinet, TemporaryUploadedFile $file, $action) use ($source) {
+                    dd($file, $action);
+//                    $folder = $action->getParentFolder();
+
+                    if (!$folder) {
+                        $file->delete();
+
+                        return null;
+                    }
+
+                    try {
+                        if (!$file->exists()) {
+                            return null;
+                        }
+                    } catch (UnableToCheckFileExistence $exception) {
+                        return null;
+                    }
+
+                    $source->upload($folder, $file);
+
+                    $file->delete();
+                })
+                ->required()
+        ];
     }
 }

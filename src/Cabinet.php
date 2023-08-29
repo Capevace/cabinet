@@ -7,6 +7,8 @@ use Cabinet\Services\Actions;
 use Cabinet\Services\Directories;
 use Cabinet\Services\Files;
 use Cabinet\Services\References;
+use Cabinet\Sources\Contracts\AcceptsUploads;
+use Cabinet\Sources\Contracts\HasFilamentForm;
 use Cabinet\Sources\SpatieMediaSource;
 use Cabinet\Types\Audio;
 use Cabinet\Types\Document;
@@ -28,6 +30,8 @@ class Cabinet
         SpatieMediaSource::TYPE => SpatieMediaSource::class,
     ];
 
+    protected $sourceLabels = [];
+
     protected $fileTypes = [
         Image::class,
         Video::class,
@@ -38,6 +42,13 @@ class Cabinet
     ];
 
     protected Closure|null $configureMediaConversions = null;
+
+    public function __construct()
+    {
+        $this->sourceLabels = [
+            SpatieMediaSource::TYPE => __('cabinet::files.files'),
+        ];
+    }
 
     public function registerSource(string $name, string $className): self
     {
@@ -75,7 +86,38 @@ class Cabinet
             ->map(fn (string $source) => $this->getSource($source));
     }
 
+    public function getSourceOptions(): array
+    {
+        return $this->mapSources()
+            ->filter(fn (Source $source) => $source instanceof HasFilamentForm || $source instanceof AcceptsUploads)
+            ->mapWithKeys(fn (Source $source) => [$source::type() => $this->sourceLabels[$source::type()] ?? $source->label()])
+            ->toArray();
+    }
 
+
+    public function getSourceForm(string $source): array|string|null
+    {
+        $source = $this->getSource($source);
+
+        if ($source instanceof HasFilamentForm) {
+            /**
+             * @var HasFilamentForm $source
+             */
+
+            return $source->getFormSchema();
+        } else if ($source instanceof AcceptsUploads) {
+            return 'upload';
+        }
+
+        return null;
+    }
+
+    public function setSourceLabel(string $source, string $label): self
+    {
+        $this->sourceLabels[$source] = $label;
+
+        return $this;
+    }
 
     /**
      * @return Collection<FileType>
