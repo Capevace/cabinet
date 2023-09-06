@@ -104,7 +104,7 @@ class Cabinet
              * @var HasFilamentForm $source
              */
 
-            return $source->getFormSchema($fileUploadComponent ?? fn () => null);
+            return $source->getFormSchema($fileUploadComponent);
         } else if ($source instanceof AcceptsUploads) {
             return $fileUploadComponent
 				? [$fileUploadComponent()]
