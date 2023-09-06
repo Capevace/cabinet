@@ -14,10 +14,6 @@ class CabinetServiceProvider extends PackageServiceProvider
     {
         parent::register();
 
-        $this->app->singleton(SourceService::class, function () {
-            return new SourceService;
-        });
-
         $this->app->singleton(Cabinet::class, function () {
             return new Cabinet;
         });

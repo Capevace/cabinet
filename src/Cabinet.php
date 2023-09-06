@@ -95,18 +95,20 @@ class Cabinet
     }
 
 
-    public function getSourceForm(string $source): array|string|null
+    public function getSourceForm(string $sourceName, ?Closure $fileUploadComponent = null): array|string|null
     {
-        $source = $this->getSource($source);
+        $source = $this->getSource($sourceName);
 
         if ($source instanceof HasFilamentForm) {
             /**
              * @var HasFilamentForm $source
              */
 
-            return $source->getFormSchema();
+            return $source->getFormSchema($fileUploadComponent ?? fn () => null);
         } else if ($source instanceof AcceptsUploads) {
-            return 'upload';
+            return $fileUploadComponent
+				? [$fileUploadComponent()]
+				: null;
         }
 
         return null;
@@ -147,7 +149,7 @@ class Cabinet
             }
         }
 
-        return app(Other::class);
+        return app(Other::class, ['mime' => $mime]);
     }
 
     public function makeFileType(string $slug, ?string $mime = null): ?FileType

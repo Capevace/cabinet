@@ -20,6 +20,8 @@ use Cabinet\Sources\Contracts\HasContents;
 use Cabinet\Sources\Contracts\HasFilamentForm;
 use Cabinet\Sources\Contracts\HasPath;
 use Cabinet\Sources\Contracts\HasModel;
+use Carbon\Carbon;
+use Closure;
 use Filament\Forms\Components\FileUpload;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Response;
@@ -80,7 +82,7 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
             size: $media->size,
             previewUrl: $media->hasGeneratedConversion($thumbnailConversion)
                 ? $media->getFullUrl($thumbnailConversion)
-                : $media->getFullUrl(),
+                : $media->getFullUrl()
         );
     }
 
@@ -174,7 +176,7 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
         $media->delete();
     }
 
-    public function upload(Folder $folder, UploadedFile $file, ?string $collection = null, ?bool $preserveOriginal = null): File
+    public function upload(Folder $folder, UploadedFile $file, array $data = [], ?string $collection = null, ?bool $preserveOriginal = null): File
     {
         if (!$folder->isCabinetFolder()) {
             throw new WrongSource('Media files can only be uploaded to Cabinet folders');
@@ -271,36 +273,11 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
         return response()->download($media->getPath($this->getDefaultConversion()), $media->file_name);
     }
 
-    public function getFormSchema(): array
+    public function getFormSchema(Closure $fileUploadComponent): array
     {
         $source = $this;
         return [
-            FileUpload::make('files')
-                ->label('Files')
-                ->multiple()
-                ->saveUploadedFileUsing(function (Cabinet $cabinet, TemporaryUploadedFile $file, $action) use ($source) {
-                    dd($file, $action);
-//                    $folder = $action->getParentFolder();
 
-                    if (!$folder) {
-                        $file->delete();
-
-                        return null;
-                    }
-
-                    try {
-                        if (!$file->exists()) {
-                            return null;
-                        }
-                    } catch (UnableToCheckFileExistence $exception) {
-                        return null;
-                    }
-
-                    $source->upload($folder, $file);
-
-                    $file->delete();
-                })
-                ->required()
         ];
     }
 }

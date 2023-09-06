@@ -8,5 +8,5 @@ use Illuminate\Http\UploadedFile;
 
 interface AcceptsUploads
 {
-    public function upload(Folder $folder, UploadedFile $file): File;
+    public function upload(Folder $folder, UploadedFile $file, array $data = []): File;
 }

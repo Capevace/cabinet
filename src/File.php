@@ -34,7 +34,8 @@ readonly class File
         public string   $mimeType,
         public int      $size,
         public ?string  $previewUrl,
-        public ?string  $icon = null
+        public ?string  $icon = null,
+        public ?array   $attributes = null,
     ) {}
 
     public function url(?string $variant = null): ?string
