@@ -11,6 +11,8 @@ return [
     'preview' => 'Preview',
     'duplicate' => 'Duplicate',
     'select-file' => 'Select file|Select files',
+    'select-x-files' => 'Select file|Select :value files',
+    'select-no-files' => 'Select no file|Select no files',
     'copy-link' => 'Copy link',
     'delete-folder' => 'Delete folder',
     'create-folder' => 'Create folder',
