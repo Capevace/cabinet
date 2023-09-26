@@ -63,7 +63,7 @@ class Directory extends Model implements HasMedia
         if ($conversion = config('cabinet.spatie_media_library.preview_conversion')) {
             $this->addMediaConversion($conversion)
                 ->width(400)
-                ->background('transparent')
+                ->background('white')
                 ->format('jpg')
                 ->quality(85)
                 ->pdfPageNumber(1);
