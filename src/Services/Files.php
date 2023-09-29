@@ -12,7 +12,6 @@ use Cabinet\Sources\Contracts\FindWithPath;
 use Cabinet\Sources\Contracts\HasModel;
 use Cabinet\Sources\Contracts\HasPath;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Response;
 
 trait Files
 {
