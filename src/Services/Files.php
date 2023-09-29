@@ -96,7 +96,7 @@ trait Files
         return $source->getFileModel($file);
     }
 
-    public function download(File $file): Response
+    public function download(File $file): \Symfony\Component\HttpFoundation\Response
     {
         $source = $this->getSource($file->source);
 
