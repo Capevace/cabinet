@@ -270,7 +270,10 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
     {
         $media = $this->findMediaOrFail($file);
 
-        return response()->download($media->getPath($this->getDefaultConversion()), $media->file_name);
+        $url = $media->getTemporaryUrl(Carbon::now()->addHours(2), $this->getDefaultConversion());
+        $filename = $media->file_name;
+
+        return response()->redirectTo($url);
     }
 
     public function getFormSchema(Closure $fileUploadComponent): array
