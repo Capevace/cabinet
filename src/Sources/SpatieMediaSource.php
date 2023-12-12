@@ -21,6 +21,7 @@ use Cabinet\Sources\Contracts\HasFilamentForm;
 use Cabinet\Sources\Contracts\HasPath;
 use Cabinet\Sources\Contracts\HasModel;
 use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Closure;
 use Filament\Forms\Components\FileUpload;
 use Illuminate\Database\Eloquent\Model;
@@ -56,6 +57,11 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
         return config('cabinet.spatie_media_library.default_conversion') ?? '';
     }
 
+	protected function getDefaultExpiration(): CarbonImmutable
+	{
+		return CarbonImmutable::now()->addMinutes(config('cabinet.spatie_media_library.default_expiration_minutes') ?? 60);
+	}
+
     protected function findMediaOrFail(File $file): Media
     {
         $mediaModel = $this->getMediaModel();
@@ -71,18 +77,21 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
     public function transformMedia(Media $media): File
     {
         $thumbnailConversion = $this->getThumbnailConversion();
+		$type = Cabinet::determineFileTypeFromMime($media->mime_type);
 
         return new File(
             id: (string) $media->getKey(),
             source: self::TYPE,
-            type: Cabinet::determineFileTypeFromMime($media->mime_type),
+            type: $type,
             name: $media->name,
             slug: $media->file_name,
             mimeType: $media->mime_type,
             size: $media->size,
-            previewUrl: $media->hasGeneratedConversion($thumbnailConversion)
-                ? $media->getFullUrl($thumbnailConversion)
-                : $media->getFullUrl()
+			// For non-image files, we HAVE to try the thumbnail, as displaying them in img won't work (video, pdf, etc.).
+			// For images, we can use the thumbnail if it exists, but if it doesn't, we can just use display the full image itself.
+            previewUrl: $media->hasGeneratedConversion($thumbnailConversion) || $type->slug() !== 'image'
+                ? $media->getTemporaryUrl(expiration: $this->getDefaultExpiration(), conversionName: $thumbnailConversion)
+                : $media->getTemporaryUrl(expiration: $this->getDefaultExpiration())
         );
     }
 
@@ -246,7 +255,7 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
     {
         $media = $this->findMediaOrFail($file);
 
-        return $media->getFullUrl($variant ?? $this->getDefaultConversion());
+        return $media->getTemporaryUrl($this->getDefaultExpiration(), $variant ?? $this->getDefaultConversion());
     }
 
     public function getFileModel(File $file): Model

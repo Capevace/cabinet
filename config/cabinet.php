@@ -16,6 +16,7 @@ return [
         'conversions_disk' => 'public',
 
         'default_conversion' => '',
-        'preview_conversion' => 'thumbnail'
+        'preview_conversion' => 'thumbnail',
+		'default_expiration_minutes' => 60,
     ]
 ];
