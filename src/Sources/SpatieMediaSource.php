@@ -23,6 +23,7 @@ use Cabinet\Sources\Contracts\HasModel;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Closure;
+use DateTimeInterface;
 use Filament\Forms\Components\FileUpload;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Response;
@@ -74,7 +75,7 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
         return $media;
     }
 
-    public function transformMedia(Media $media): File
+    public function transformMedia(Media $media, ?DateTimeInterface $expiresAt = null): File
     {
         $thumbnailConversion = $this->getThumbnailConversion();
 		$type = Cabinet::determineFileTypeFromMime($media->mime_type);
@@ -90,8 +91,8 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
 			// For non-image files, we HAVE to try the thumbnail, as displaying them in img won't work (video, pdf, etc.).
 			// For images, we can use the thumbnail if it exists, but if it doesn't, we can just use display the full image itself.
             previewUrl: $media->hasGeneratedConversion($thumbnailConversion) || $type->slug() !== 'image'
-                ? $media->getTemporaryUrl(expiration: $this->getDefaultExpiration(), conversionName: $thumbnailConversion)
-                : $media->getTemporaryUrl(expiration: $this->getDefaultExpiration())
+                ? $media->getTemporaryUrl(expiration: $expiresAt ?? $this->getDefaultExpiration(), conversionName: $thumbnailConversion)
+                : $media->getTemporaryUrl(expiration: $expiresAt ?? $this->getDefaultExpiration())
         );
     }
 
@@ -251,11 +252,11 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
         return $this->transformMedia($media);
     }
 
-    public function generateUrl(File $file, ?string $variant = null): ?string
+    public function generateUrl(File $file, ?string $variant = null, ?DateTimeInterface $expiresAt = null): ?string
     {
         $media = $this->findMediaOrFail($file);
 
-        return $media->getTemporaryUrl($this->getDefaultExpiration(), $variant ?? $this->getDefaultConversion());
+        return $media->getTemporaryUrl($expiresAt ?? $this->getDefaultExpiration(), $variant ?? $this->getDefaultConversion());
     }
 
     public function getFileModel(File $file): Model

@@ -16,5 +16,6 @@ return [
     'copy-link' => 'Link kopieren',
     'delete-folder' => 'Ordner löschen',
     'create-folder' => 'Neuer Ordner',
-    'upload-file' => 'Datei hochladen'
+    'upload-file' => 'Datei hochladen',
+    'refresh-file' => 'Datei-Artefakte aktualisieren',
 ];

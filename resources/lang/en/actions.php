@@ -17,4 +17,5 @@ return [
     'delete-folder' => 'Delete folder',
     'create-folder' => 'Create folder',
     'upload-file' => 'Upload file',
+    'refresh-file' => 'Refresh file artifacts',
 ];

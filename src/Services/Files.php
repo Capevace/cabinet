@@ -11,6 +11,7 @@ use Cabinet\Sources\Contracts\FindWithId;
 use Cabinet\Sources\Contracts\FindWithPath;
 use Cabinet\Sources\Contracts\HasModel;
 use Cabinet\Sources\Contracts\HasPath;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
 
 trait Files
@@ -59,7 +60,7 @@ trait Files
         return $source->path($file);
     }
 
-    public function generateFileUrl(File $file, ?string $variant = null): ?string
+    public function generateFileUrl(File $file, ?string $variant = null, ?DateTimeInterface $expiresAt = null): ?string
     {
         $source = $this->getSource($file->source);
 
@@ -68,7 +69,7 @@ trait Files
         }
 
         /** @var CanGenerateUrls $source */
-        return $source->generateUrl($file, $variant);
+        return $source->generateUrl($file, $variant, $expiresAt);
     }
 
     public function generateFilePath(File $file): ?string
