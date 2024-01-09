@@ -21,6 +21,7 @@ namespace Cabinet;
 //    public function url(): string;
 //}
 
+
 use Illuminate\Database\Eloquent\Model;
 
 readonly class File
