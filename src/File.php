@@ -2,26 +2,6 @@
 
 namespace Cabinet;
 
-//interface File
-//{
-//    public function id(): string;
-//
-//    public function source(): string;
-//
-//    public function type(): FileType;
-//
-//    public function name(): string;
-//
-//    public function slug(): string;
-//
-//    public function mimeType(): string;
-//
-//    public function size(): int;
-//
-//    public function url(): string;
-//}
-
-
 use Illuminate\Database\Eloquent\Model;
 
 readonly class File
@@ -130,6 +110,7 @@ readonly class File
             'type' => $this->type->slug(),
             'id' => $this->id,
             'source' => $this->source,
+            'name' => $this->name
         ];
     }
 
