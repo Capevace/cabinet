@@ -26,4 +26,9 @@ class PDF implements \Cabinet\FileType
             'application/pdf',
         ];
     }
+
+    public function extension(): ?string
+    {
+        return 'pdf';
+    }
 }

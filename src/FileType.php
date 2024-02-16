@@ -10,6 +10,8 @@ interface FileType
 
     public function icon(): string;
 
+    public function extension(): ?string;
+
     public function __toString(): string;
 
     public static function supportedMimeTypes(): array;

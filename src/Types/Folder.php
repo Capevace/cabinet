@@ -27,4 +27,9 @@ class Folder implements \Cabinet\FileType
     {
         return ['folder'];
     }
+
+    public function extension(): ?string
+    {
+        return null;
+    }
 }

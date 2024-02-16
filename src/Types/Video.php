@@ -6,6 +6,7 @@ use Cabinet\Types\Concerns\StringableAsSlug;
 use Cabinet\Types\Concerns\UsesDefaultIcon;
 use Cabinet\Types\Concerns\WithMime;
 use Cabinet\Types\Contracts\HasMime;
+use Illuminate\Support\Str;
 
 class Video implements \Cabinet\FileType, HasMime
 {
@@ -56,6 +57,15 @@ class Video implements \Cabinet\FileType, HasMime
             'video/3gpp2' => '3GPP2',
 
             default => $this->mime,
+        };
+    }
+
+    public function extension(): ?string
+    {
+        return match ($this->mime) {
+            'video/quicktime' => 'mov',
+            'video/x-matroska' => 'mkv',
+            default => Str::lower($this->formattedMimeType()),
         };
     }
 }

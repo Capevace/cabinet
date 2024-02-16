@@ -2,6 +2,8 @@
 
 namespace Cabinet\Types\Concerns;
 
+use Illuminate\Support\Str;
+
 trait WithMime
 {
     protected ?string $mime = null;
@@ -23,5 +25,10 @@ trait WithMime
     public function getMime(): ?string
     {
         return $this->mime;
+    }
+
+    public function extension(): ?string
+    {
+        return Str::lower($this->formattedMimeType());
     }
 }
