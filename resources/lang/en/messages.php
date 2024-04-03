@@ -6,6 +6,7 @@ return [
     'no-preview-available' => 'No preview available',
     'no-files-selected' => 'No file selected|No files selected',
     'cannot-select-file' => 'File could not be selected',
+    'cannot-reorder-file' => 'File could not be reordered',
     'not-eligble-for-artifact-regeneration' => 'File type does not support artifact regeneration',
     'artefact-regeneration-confirmed' => 'Artifact regeneration queued',
     'artefact-file-count' => 'One file affected|:count files affected',

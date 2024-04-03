@@ -89,4 +89,22 @@ trait References
 
         return $this;
     }
+
+    public function reorder(HasFiles $record, string $relationship, int $from, int $to): static
+    {
+        DB::transaction(function () use ($record, $relationship, $from, $to) {
+            $fileRefs = $record->{$relationship}()
+                ->orderBy('attached_order')
+                ->get();
+
+            // Explained:
+            // 1. Remove the file from the from index
+            // 2. Insert the file to the to index
+            $fileRefs->splice($to, 0, $fileRefs->splice($from, 1));
+
+            $fileRefs->each(fn (FileRef $ref, int $index) => $ref->update(['attached_order' => $index]));
+        });
+
+        return $this;
+    }
 }
