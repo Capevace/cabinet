@@ -2,11 +2,17 @@
 
 namespace Cabinet\Services;
 
+use Cabinet\Exceptions\WrongSource;
 use Cabinet\File;
+use Cabinet\Folder;
 use Cabinet\HasFiles;
+use Cabinet\Models\Directory;
 use Cabinet\Models\FileRef;
 use Cabinet\Source;
+use Cabinet\Sources\Contracts\AcceptsUploads;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -45,6 +51,39 @@ trait References
                 'attached_as' => $as,
                 'attached_order' => $order
             ]
+        );
+    }
+
+    /**
+     * @throws WrongSource
+     * @throws Exception
+     */
+    public function uploadAndAttachFromPath(string $source, string $path, Directory|Folder $folder, Model $to = null, string $as = null, ?int $order = null): FileRef
+    {
+        /** @var AcceptsUploads $uploadableSource */
+        $uploadableSource = $this->getSource($source);
+
+        if (!($uploadableSource instanceof AcceptsUploads)) {
+            throw new WrongSource("{$source} source does not implement " . AcceptsUploads::class);
+        }
+
+        $uploadedFile = new UploadedFile(
+            path: $path,
+            originalName: basename($path),
+            mimeType: mime_content_type($path)
+        );
+
+        if ($folder instanceof Directory) {
+            $folder = $folder->asFolder();
+        }
+
+        $file = $uploadableSource->upload($folder, $uploadedFile);
+
+        return $this->attach(
+            file: $file,
+            to: $to,
+            as: $as,
+            order: $order
         );
     }
 
