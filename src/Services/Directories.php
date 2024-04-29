@@ -123,6 +123,9 @@ trait Directories
                 ->merge($subdirs);
         }
 
+        // Sort by name
+        $files = $files->sortBy('name');
+
 
         return $files;
     }

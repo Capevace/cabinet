@@ -39,7 +39,7 @@ trait References
         return $source->reference($file);
     }
 
-    public function attach(File $file, Model $to = null, string $as = null, ?int $order = null): FileRef
+    public function attach(File $file, Model $to, ?string $as = null, ?int $order = null): FileRef
     {
         $source = $this->getSource($file->source);
 
@@ -58,7 +58,7 @@ trait References
      * @throws WrongSource
      * @throws Exception
      */
-    public function uploadAndAttachFromPath(string $source, string $path, Directory|Folder $folder, Model $to = null, string $as = null, ?int $order = null): FileRef
+    public function uploadAndAttachFromPath(string $source, string $path, Directory|Folder $folder, ?Model $to = null, ?string $as = null, ?int $order = null): FileRef
     {
         /** @var AcceptsUploads $uploadableSource */
         $uploadableSource = $this->getSource($source);
@@ -78,6 +78,10 @@ trait References
         }
 
         $file = $uploadableSource->upload($folder, $uploadedFile);
+
+        if ($to === null) {
+            return $this->createReference($file);
+        }
 
         return $this->attach(
             file: $file,
