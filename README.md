@@ -1,8 +1,8 @@
 <div align="center">
     <img src="resources/images/screenshot.png" alt="Tailpipe logo">
 	<h1>Laravel Cabinet</h1>
-    <h3>Streamlined file management solution, integrating multiple sources</h3><br />
-	<div>
+    	<h3>Turn-key file management solution, supporting multiple sources in the same folders</h3><br />
+<!-- 	<div>
 		<a 
 			href="https://github.com/Capevace/cabinet/actions/workflows/test.yml"
 		>
@@ -21,7 +21,7 @@
 			src="https://img.shields.io/github/v/release/capevace/cabinet?include_prereleases"
 			alt="Latest release"
 		/>
-	</div>
+	</div> -->
 	<h6><em>Made by <a href="https://mateffy.me">Lukas Mateffy</a></em></h6>
 
 </div>
