@@ -185,6 +185,8 @@ In addition, it also contains an order column, which allows saving multiple file
 relationship.
 
 
+<br>
+
 ## Installation 
 
 The following command will install the cabinet core package and the UI package. The pre-built UI is made with [Filament](https://filamentphp.com) and is technically optional, but recommended.
