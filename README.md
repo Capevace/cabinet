@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="resources/images/screenshot.png" alt="Tailpipe logo">
+    <img src="resources/images/finder.png" alt="Tailpipe logo">
 	<h1>Laravel Cabinet</h1>
     	<h3>Turn-key file management solution, supporting multiple sources in the same folders</h3>
 <!-- 	<div>
@@ -39,8 +39,6 @@ custom database tables, external APIs and anything you can think of, basically).
 > subject to change. Planned release for version 1.0 and thus semver API stability is end of May 2024.
 
 <br><br>
-
-##### Table of contents
 
 <details open>
   <summary><h2>Screenshots</h2></summary>
