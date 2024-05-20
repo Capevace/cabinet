@@ -1,7 +1,7 @@
 <div align="center">
     <img src="resources/images/finder.png" alt="Tailpipe logo">
 	<h1>Laravel Cabinet</h1>
-    	<h3>Turn-key file management solution, supporting multiple sources in the same folders</h3>
+    	<h3>Turn-key "Dropbox-like" file management, supporting multiple sources in the same folders</h3>
 <!-- 	<div>
 		<a 
 			href="https://github.com/Capevace/cabinet/actions/workflows/test.yml"
