@@ -1,8 +1,8 @@
 <div align="center">
-    <img src="resources/images/screenshot.png" alt="Tailpipe logo">
+    <img src="resources/images/finder.png" alt="Tailpipe logo">
 	<h1>Laravel Cabinet</h1>
-    <h3>Streamlined file management solution, integrating multiple sources</h3><br />
-	<div>
+    	<h3>Turn-key "Dropbox-like" file management, supporting multiple sources in the same folders</h3>
+<!-- 	<div>
 		<a 
 			href="https://github.com/Capevace/cabinet/actions/workflows/test.yml"
 		>
@@ -21,33 +21,95 @@
 			src="https://img.shields.io/github/v/release/capevace/cabinet?include_prereleases"
 			alt="Latest release"
 		/>
-	</div>
-	<h6><em>Made by <a href="https://mateffy.me">Lukas Mateffy</a></em></h6>
+	</div> -->
+	<h6><em>Made by <a href="https://mateffy.me">Lukas Mateffy</a></em></h6><br><br>
 
 </div>
 <br />
 
 
-**Cabinet is a turn-key file management solution for Laravel, that enables attaching files to models. 
+<p><strong>Cabinet is a turn-key file management solution for Laravel, that enables uploading and managing files, as well as attaching files to models. 
 It integrates various file sources into a streamlined API and user interface (including disks, spatie/media-library, 
-custom database tables, etc).**
-
-<br>
-
-<details>
-  <summary><strong>Screenshots</strong></summary>
-  
-  <img src="resources/images/screenshot.png" alt="Tailpipe logo">
-  
-</details>
-
-<br>
-
-> [!WARNING]  
-> Cabinet is currently in **alpha**. While it is stable and is used in production internally, the API may still be 
-> subject to change until version 1.0 is released.
+custom database tables, external APIs and anything you can think of, basically).</strong></p>
 
 <br><br>
+
+> [!NOTE]  
+> Cabinet is currently 0.x and considered "unstable". While it's API has not changed in months and is already used in production ([domos.de](https://domos.de)), the API may still be 
+> subject to change. Planned release for version 1.0 and thus semver API stability is end of May 2024.
+
+<br><br>
+
+<details open>
+  <summary><h2>Screenshots</h2></summary>
+
+  <table>
+	  <tr>
+		  <td width="70%">
+			  <img src="resources/images/finder-with-selection.png" alt="Select files and with optional order support">
+		  </td>
+		  <td>
+			  <h4>Finder popup to mamage and select files</h4>
+			  <p>Your application code just sets some parameters, like what file types are allowed, how many files are selected and what directory to open.</p>
+		  </td>
+	  </tr>
+	  <tr>
+		  <td width="70%">
+			  <img src="resources/images/folder-support.png" alt="Supports creating and nesting folders">
+		  </td>
+		  <td>
+			  <h4>Supports creating and nesting folders and customizing the sidebar</h4>
+		  </td>
+	  </tr>
+	  <tr>
+		  <td width="70%">
+			  <img src="resources/images/file-pickers.png" alt="Pre-built file pickers for Filament Forms">
+		  </td>
+		  <td>
+			  <h4>Pre-built file inputs for <a href="https://filamentphp.com/">Filament Forms</a></h4>
+		  </td>
+	  </tr>
+	  <tr>
+		  <td width="70%">
+			  <img src="resources/images/multiple-sources-same-view.png" alt="Multiple file sources in the same view">
+		  </td>
+		  <td>
+			  <h4>Supports showing multiple file types/sources in the same folder/view</h4>
+			  <p>In this case, we can show an uploaded video (S3) right next to an "uploaded" YouTube/Vimeo video (added by URL). They share the combined file type <code>Video([mime-type])</code> which simplifies the code that uses the selected files, and they can still be differentiated using their mime-type. Thumbnails are either generated for local files (in this case using <a href="https://spatie.be/docs/laravel-medialibrary/v11/introduction">spatie/media-library</a> as a backend) or fetched from the actual YouTube/Vimeo thumbnail URLs.</p>
+		  </td>
+	  </tr>
+	  <tr>
+		  <td width="70%">
+			  <img src="resources/images/non-file-support.png" alt="Supports non-files">
+		  </td>
+		  <td>
+			  <h4>Supports real files and non-files</h4>
+			  <p>Here we use the <a href="https://matterport.com/">Matterport</a> API to add virtual scans/tours that only exist as an API resource, not singular files. In our application code however, we can just treat it as if it was a file. It has a custom (user-land) file type <code>VirtualScan</code>.</p>
+		  </td>
+	  </tr>
+	  <tr>
+		  <td width="70%">
+			  <img src="resources/images/context-menu.png" alt="Supports a context menu">
+		  </td>
+		  <td>
+			  <h4>Supports a custom context menu</h4>
+		  </td>
+	  </tr>
+	  <tr>
+		  <td width="70%">
+			  <img src="resources/images/embeddable-finder-blur.png" alt="Embed a Finder into your page">
+		  </td>
+		  <td>
+			  <h4>Embeddable Finder Livewire component</h4>
+			  <p>By assigning whole directories to your models, you can have encapsulated file management for single models. For example, manage contract documents for a Deal/Project CRM-like, media assets for CMS pages etc...</p>
+		  </td>
+	  </tr>
+  </table>
+</details>
+
+<br><br>
+
+<br>
 
 ## Motivation
 
@@ -122,6 +184,8 @@ files to a model, such as a thumbnail and a gallery, without having to worry abo
 In addition, it also contains an order column, which allows saving multiple files in a specific order under a single
 relationship.
 
+
+<br>
 
 ## Installation 
 
