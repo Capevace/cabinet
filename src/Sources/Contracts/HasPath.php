@@ -6,5 +6,5 @@ use Cabinet\File;
 
 interface HasPath
 {
-    public function path(File $file): string;
+    public function path(File $file, ?string $variant = null): string;
 }

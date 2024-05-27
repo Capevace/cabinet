@@ -24,9 +24,9 @@ readonly class File
         return \Cabinet\Facades\Cabinet::generateFileUrl($this, $variant);
     }
 
-    public function path(): ?string
+    public function path(?string $variant = null): ?string
     {
-        return \Cabinet\Facades\Cabinet::generateFilePath($this);
+        return \Cabinet\Facades\Cabinet::generateFilePath($this, $variant);
     }
 
     public function model(): ?Model

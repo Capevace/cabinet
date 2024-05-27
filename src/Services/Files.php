@@ -12,6 +12,7 @@ use Cabinet\Sources\Contracts\FindWithPath;
 use Cabinet\Sources\Contracts\HasModel;
 use Cabinet\Sources\Contracts\HasPath;
 use DateTimeInterface;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 
 trait Files
@@ -49,12 +50,15 @@ trait Files
         return null;
     }
 
-    public function contents(File $file): string
+    /**
+     * @throws Exception
+     */
+    public function contents(File $file, ?string $variant = null): string
     {
         $source = $this->getSource($file->source);
 
         if (!class_implements($source::class, HasPath::class)) {
-            throw new \Exception("Source {$file->source} does not implement " . HasPath::class);
+            throw new Exception("Source {$file->source} does not implement " . HasPath::class);
         }
 
         return $source->path($file);
@@ -72,7 +76,7 @@ trait Files
         return $source->generateUrl($file, $variant, $expiresAt);
     }
 
-    public function generateFilePath(File $file): ?string
+    public function generateFilePath(File $file, ?string $variant = null): ?string
     {
         $source = $this->getSource($file->source);
 
@@ -81,7 +85,7 @@ trait Files
         }
 
         /** @var HasPath $source */
-        return $source->path($file);
+        return $source->path($file, variant: $variant);
     }
 
     public function getFileModel(File $file): ?Model

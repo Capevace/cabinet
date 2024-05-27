@@ -13,5 +13,6 @@ return [
     'invalid-file-types' => 'This file\'s type is not allowed|:count file types are not allowed',
     'files-uploaded-successfully' => 'One file uploaded successfully|:count files uploaded successfully',
     'files-skipped' => 'One file was skipped|:count files were skipped',
+    'file-size-exceeded' => 'File is too big. Maximum size is :size',
     'unknown-error' => 'An unknown error occurred. Please try again.',
 ];

@@ -264,11 +264,11 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
         return $this->findMediaOrFail($file);
     }
 
-    public function path(File $file): string
+    public function path(File $file, ?string $variant = null): string
     {
         $media = $this->findMediaOrFail($file);
 
-        return $media->getPath($this->getDefaultConversion());
+        return $media->getPath($variant ?? $this->getDefaultConversion());
     }
 
     public function contents(File $file): string
