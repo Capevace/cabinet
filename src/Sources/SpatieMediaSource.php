@@ -6,7 +6,6 @@ use Cabinet\Exceptions\FileNotFound;
 use Cabinet\Exceptions\FileStillReferenced;
 use Cabinet\Exceptions\WrongSource;
 use Cabinet\Facades\Cabinet;
-use Cabinet\Filament\Livewire\Finder\Actions\UploadFile;
 use Cabinet\File;
 use Cabinet\FileType;
 use Cabinet\Folder;
@@ -17,24 +16,18 @@ use Cabinet\Sources\Contracts\CanBeDownloaded;
 use Cabinet\Sources\Contracts\CanGenerateUrls;
 use Cabinet\Sources\Contracts\FindWithId;
 use Cabinet\Sources\Contracts\HasContents;
-use Cabinet\Sources\Contracts\HasFilamentForm;
-use Cabinet\Sources\Contracts\HasPath;
 use Cabinet\Sources\Contracts\HasModel;
+use Cabinet\Sources\Contracts\HasPath;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Closure;
 use DateTimeInterface;
-use Filament\Forms\Components\FileUpload;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
-use League\Flysystem\UnableToCheckFileExistence;
-use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-
-class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, CanGenerateUrls, HasModel, HasPath, HasContents, CanBeDownloaded
+class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, CanBeDownloaded, CanGenerateUrls, FindWithId, HasContents, HasModel, HasPath
 {
     public const TYPE = 'spatie-media';
 
@@ -58,10 +51,10 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
         return config('cabinet.spatie_media_library.default_conversion') ?? '';
     }
 
-	protected function getDefaultExpiration(): CarbonImmutable
-	{
-		return CarbonImmutable::now()->addMinutes(config('cabinet.spatie_media_library.default_expiration_minutes') ?? 60);
-	}
+    protected function getDefaultExpiration(): CarbonImmutable
+    {
+        return CarbonImmutable::now()->addMinutes(config('cabinet.spatie_media_library.default_expiration_minutes') ?? 60);
+    }
 
     protected function findMediaOrFail(File $file): Media
     {
@@ -78,7 +71,7 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
     public function transformMedia(Media $media, ?DateTimeInterface $expiresAt = null): File
     {
         $thumbnailConversion = $this->getThumbnailConversion();
-		$type = Cabinet::determineFileTypeFromMime($media->mime_type);
+        $type = Cabinet::determineFileTypeFromMime($media->mime_type);
 
         return new File(
             id: (string) $media->getKey(),
@@ -88,17 +81,18 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
             slug: $media->file_name,
             mimeType: $media->mime_type,
             size: $media->size,
-			// For non-image files, we HAVE to try the thumbnail, as displaying them in img won't work (video, pdf, etc.).
-			// For images, we can use the thumbnail if it exists, but if it doesn't, we can just use display the full image itself.
+            // For non-image files, we HAVE to try the thumbnail, as displaying them in img won't work (video, pdf, etc.).
+            // For images, we can use the thumbnail if it exists, but if it doesn't, we can just use display the full image itself.
             previewUrl: $media->hasGeneratedConversion($thumbnailConversion) || $type->slug() !== 'image'
                 ? $media->getTemporaryUrl(expiration: $expiresAt ?? $this->getDefaultExpiration(), conversionName: $thumbnailConversion)
-                : $media->getTemporaryUrl(expiration: $expiresAt ?? $this->getDefaultExpiration())
+                : $media->getTemporaryUrl(expiration: $expiresAt ?? $this->getDefaultExpiration()),
+            model: $media
         );
     }
 
     public function all(Folder $folder, Query $options = new Query): Collection
     {
-        if (!$folder->isCabinetFolder()) {
+        if (! $folder->isCabinetFolder()) {
             return collect();
         }
 
@@ -110,10 +104,9 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
 
         $mediaModel = $this->getMediaModel();
         $query = $mediaModel::query()
-            ->whereHas('model', fn ($query) =>
-                $query
-                    ->where('model_type', Cabinet::getDirectoryMorphClass())
-                    ->where('model_id', $folder->id)
+            ->whereHas('model', fn ($query) => $query
+                ->where('model_type', Cabinet::getDirectoryMorphClass())
+                ->where('model_id', $folder->id)
             );
 
         if ($options->search !== null) {
@@ -146,7 +139,7 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
 
     public function rename(File $file, string $name): File
     {
-        $media = $this->findMediaOrFail($file);
+        $media = $this->getFileModel($file);
 
         $media->name = $name;
 
@@ -157,11 +150,11 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
 
     public function move(File $file, Folder $folder): File
     {
-        if (!$folder->isCabinetFolder()) {
+        if (! $folder->isCabinetFolder()) {
             throw new WrongSource('Media files can only be moved to Cabinet folders');
         }
 
-        $media = $this->findMediaOrFail($file);
+        $media = $this->getFileModel($file);
         $directory = $folder->findDirectoryOrFail();
 
         $media->model_id = $directory->getKey();
@@ -176,9 +169,9 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
         $refs = $this->references($file);
         $deleteRefs = config('cabinet.auto_delete_references', true);
 
-        if ($refs->isNotEmpty() && !$deleteRefs) {
+        if ($refs->isNotEmpty() && ! $deleteRefs) {
             throw new FileStillReferenced('Cannot delete media file that is still referenced');
-        } else if ($refs->isNotEmpty() && $deleteRefs) {
+        } elseif ($refs->isNotEmpty() && $deleteRefs) {
             $refs->each->delete();
         }
 
@@ -188,7 +181,7 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
 
     public function upload(Folder $folder, UploadedFile $file, array $data = [], ?string $collection = null, ?bool $preserveOriginal = null): File
     {
-        if (!$folder->isCabinetFolder()) {
+        if (! $folder->isCabinetFolder()) {
             throw new WrongSource('Media files can only be uploaded to Cabinet folders');
         }
 
@@ -203,12 +196,12 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
         return $this->transformMedia($media);
     }
 
-    public function references(File $file, int $limit = null, int $offset = null): Collection
+    public function references(File $file, ?int $limit = null, ?int $offset = null): Collection
     {
         $mediaModel = $this->getMediaModel();
         $morphClass = (new $mediaModel)->getMorphClass();
 
-        $query =  FileRef::where('model_type', $morphClass)
+        $query = FileRef::where('model_type', $morphClass)
             ->where('model_id', $file->id);
 
         if ($limit !== null) {
@@ -229,13 +222,13 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
 
     public function reference(File $file, array $attached_to = []): FileRef
     {
-        $media = $this->findMediaOrFail($file);
+        $media = $this->getFileModel($file);
 
         return FileRef::create([
             'source' => static::TYPE,
             'model_type' => $media->getMorphClass(),
             'model_id' => $media->getKey(),
-            ...$attached_to
+            ...$attached_to,
         ]);
     }
 
@@ -254,19 +247,22 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
 
     public function generateUrl(File $file, ?string $variant = null, ?DateTimeInterface $expiresAt = null): ?string
     {
-        $media = $this->findMediaOrFail($file);
+        $media = $this->getFileModel($file);
 
         return $media->getTemporaryUrl($expiresAt ?? $this->getDefaultExpiration(), $variant ?? $this->getDefaultConversion());
     }
 
+	/**
+	 * @return Media
+	 */
     public function getFileModel(File $file): Model
     {
-        return $this->findMediaOrFail($file);
+        return $file->model ?? $this->findMediaOrFail($file);
     }
 
     public function path(File $file, ?string $variant = null): string
     {
-        $media = $this->findMediaOrFail($file);
+        $media = $this->getFileModel($file);
 
         return $media->getPath($variant ?? $this->getDefaultConversion());
     }
@@ -278,7 +274,7 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
 
     public function download(File $file): \Symfony\Component\HttpFoundation\Response
     {
-        $media = $this->findMediaOrFail($file);
+        $media = $this->getFileModel($file);
 
         $url = $media->getTemporaryUrl(Carbon::now()->addHours(2), $this->getDefaultConversion());
         $filename = $media->file_name;
@@ -289,6 +285,7 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, FindWithId, 
     public function getFormSchema(Closure $fileUploadComponent): array
     {
         $source = $this;
+
         return [
 
         ];

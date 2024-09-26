@@ -17,6 +17,7 @@ readonly class File
         public ?string  $previewUrl,
         public ?string  $icon = null,
         public ?array   $attributes = null,
+		public ?Model $model = null,
     ) {}
 
     public function url(?string $variant = null): ?string
@@ -31,6 +32,10 @@ readonly class File
 
     public function model(): ?Model
     {
+		if ($this->model) {
+			return $this->model;
+		}
+
         return \Cabinet\Facades\Cabinet::getFileModel($this);
     }
 

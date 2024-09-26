@@ -5,6 +5,7 @@ namespace Cabinet\Models;
 use Cabinet\Cabinet;
 use Cabinet\File;
 use Cabinet\Models\Concerns\WithUuid;
+use Cabinet\Types\Image;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
@@ -37,6 +38,19 @@ class FileRef extends Model
     {
         $cabinet = app(Cabinet::class);
         $source = $cabinet->getSource($this->source);
+
+
+        return new File(
+            id: 'wat',
+            source: 'spatie-media',
+            type: new Image(),
+            name: 'test.png',
+            slug: 'test.png',
+            mimeType: 'image/png',
+            size: 6566715,
+            previewUrl: null,
+            model: $this->model,
+        );
 
         return $source->transform($this);
     }
