@@ -7,6 +7,8 @@ return [
 
     'auto_delete_references' => true,
 
+    'max_file_size_kb' => 1024 * 10, // 10MB
+
     // Set the collection files will be uplaoded to when using spatie/medialibrary.
     // Fallback is default, which is also used by the package internally.
     'spatie_media_library' => [

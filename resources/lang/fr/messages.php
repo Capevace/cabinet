@@ -1,0 +1,21 @@
+<?php
+
+return [
+    'cannot-download-folder' => "Vous ne pouvez pas télécharger un dossier",
+    'no-files-uploaded' => "Aucun fichier n'a été téléchargé",
+    'no-preview-available' => "Aucun aperçu disponible",
+    'no-files-selected' => "Aucun fichier sélectionné|Aucun fichier sélectionné",
+    'cannot-select-file' => "Le fichier n'a pas pu être sélectionné",
+    'cannot-reorder-file' => "Le fichier n'a pas pu être réorganisé",
+    'not-eligble-for-artifact-regeneration' => "Le type de fichier ne prend pas en charge la régénération d'artefacts",
+    'artefact-regeneration-confirmed' => "Régénération de l'artefact mise en file d'attente",
+    'artefact-file-count' => "Un fichier affecté|:count fichiers affectés",
+    'invalid-file-types' => "Le type de ce fichier n'est pas autorisé|:count types de fichiers ne sont pas autorisés",
+    'files-uploaded-successfully' => "Un fichier téléchargé avec succès|:count fichiers téléchargés avec succès",
+    'files-skipped' => "Un fichier a été ignoré|:count fichiers ont été ignorés",
+    'file-size-exceeded' => "Le fichier est trop volumineux. La taille maximale est :size",
+    'unknown-error' => "Une erreur inconnue est survenue. Veuillez réessayer.",
+    'empty-folder' => "Ce dossier est vide",
+    'drag-or-add-files' => "Vous pouvez glisser-déposer des fichiers ici ou cliquer sur l'icône en haut à droite pour ajouter des fichiers.",
+
+];

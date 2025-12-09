@@ -1,0 +1,21 @@
+<?php
+
+return [
+    'cannot-download-folder' => "Impossibile scaricare una cartella",
+    'no-files-uploaded' => "Nessun file caricato",
+    'no-preview-available' => "Nessuna anteprima disponibile",
+    'no-files-selected' => "Nessun file selezionato|Nessun file selezionato",
+    'cannot-select-file' => "Impossibile selezionare il file",
+    'cannot-reorder-file' => "Impossibile riordinare il file",
+    'not-eligble-for-artifact-regeneration' => "Il tipo di file non supporta la rigenerazione degli artefatti",
+    'artefact-regeneration-confirmed' => "Rigenerazione artefatto accodata",
+    'artefact-file-count' => "Un file interessato|:count file interessati",
+    'invalid-file-types' => "Il tipo di questo file non è consentito|:count tipi di file non sono consentiti",
+    'files-uploaded-successfully' => "Un file caricato con successo|:count file caricati con successo",
+    'files-skipped' => "Un file è stato saltato|:count file sono stati saltati",
+    'file-size-exceeded' => "Il file è troppo grande. La dimensione massima è :size",
+    'unknown-error' => "Si è verificato un errore sconosciuto. Si prega di riprovare.",
+    'empty-folder' => "Questa cartella è ancora vuota",
+    'drag-or-add-files' => "Puoi trascinare i file qui o fare clic sull'icona in alto a destra per aggiungere file.",
+
+];

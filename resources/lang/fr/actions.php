@@ -1,0 +1,32 @@
+<?php
+
+return [
+    'rename' => "Renommer",
+    'share' => "Partager",
+    'upload-file' => "Téléverser un fichier",
+    'delete' => "Supprimer",
+    'download' => "Télécharger",
+    'move' => "Déplacer",
+    'copy' => "Copier",
+    'close' => "Fermer",
+    'preview' => "Aperçu",
+    'duplicate' => "Dupliquer",
+    'select-file' => "Sélectionner un fichier|Sélectionner des fichiers",
+    'select-x-files' => "Sélectionner un fichier|Sélectionner :value fichiers",
+    'select-no-files' => "Aucun fichier sélectionné|Aucun fichier sélectionné",
+    'copy-link' => "Copier le lien",
+    'delete-folder' => "Supprimer le dossier",
+    'create-folder' => "Créer un dossier",
+    'refresh-file' => "Actualiser les artefacts du fichier",
+    'upload-files' => [
+        'label' => "Téléchargement de fichiers",
+        'type' => "Type de fichier",
+        'files' => "Fichiers",
+        'submit' => "Téléverser",
+        'placeholder' => "Sélectionner un type de fichier",
+        'max-size' => "Taille maximale du fichier : :value KB",
+        'accepted-file-types' => "Types de fichiers acceptés : :value",
+        'max-size-any' => "Taille maximale du fichier : :value",
+    ],
+
+];

@@ -11,7 +11,10 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Cabinet\\Tests\\": "tests/"
+            "Cabinet\\Tests\\": "tests/",
+            "Workbench\\App\\": "workbench/app/",
+            "Workbench\\Database\\Factories\\": "workbench/database/factories/",
+            "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
         }
     },
     "authors": [
@@ -22,7 +25,7 @@
     ],
     "require": {
         "php": "^8.0",
-        "spatie/laravel-package-tools": "^1.15",
+        "spatie/laravel-package-tools": "^1.92",
         "illuminate/contracts": "^12.0 || ^11.0 || ^10.0",
         "ext-fileinfo": "*"
     },
@@ -35,5 +38,29 @@
                 "Cabinet": "Cabinet\\Facades\\Cabinet"
             }
         }
+    },
+    "require-dev": {
+        "orchestra/testbench": "^10",
+        "mateffy/ai-translations": "^2.2"
+    },
+    "config": {
+        "allow-plugins": {
+            "kylekatarnls/update-helper": true
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "@clear",
+            "@prepare"
+        ],
+        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+        "prepare": "@php vendor/bin/testbench package:discover --ansi",
+        "build": "@php vendor/bin/testbench workbench:build --ansi",
+        "serve": [
+            "Composer\\Config::disableProcessTimeout",
+            "@build",
+            "@php vendor/bin/testbench serve --ansi"
+        ],
+        "translate": "@php vendor/bin/testbench translate --lang-dir=./resources/lang --fast --base-language=de"
     }
 }

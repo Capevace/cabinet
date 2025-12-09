@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'file' => 'File',
     'files' => 'Files',
     'image' => 'Image',
     'video' => 'Video',
