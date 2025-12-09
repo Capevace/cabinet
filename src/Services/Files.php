@@ -11,12 +11,43 @@ use Cabinet\Sources\Contracts\FindWithId;
 use Cabinet\Sources\Contracts\FindWithPath;
 use Cabinet\Sources\Contracts\HasModel;
 use Cabinet\Sources\Contracts\HasPath;
+use Closure;
 use DateTimeInterface;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\URL;
 
 trait Files
 {
+    /**
+     * @var Closure(File $file, DateTimeInterface $expiresAt, ?string $variant = null): string
+     */
+    protected Closure|null $generateDownloadUrlUsing = null;
+
+    public function generateDownloadUrlUsing(Closure $callback): self
+    {
+        $this->generateDownloadUrlUsing = $callback;
+
+        return $this;
+    }
+
+    public function generateDownloadUrl(File $file, ?string $variant = null): string
+    {
+        if ($this->generateDownloadUrlUsing) {
+            return ($this->generateDownloadUrlUsing)($file, $variant);
+        }
+
+        return URL::temporarySignedRoute(
+            name: 'cabinet.download',
+            parameters: array_filter([
+                'source' => $file->source,
+                'file_id' => $file->id,
+                'variant' => $variant,
+            ]),
+            expiration: now()->addMinutes(config('cabinet.download.expires_after_minutes')),
+        );
+    }
+
     public function file(string $sourceName, string $idOrPath, ?string $disk = null): ?File
     {
         try {
