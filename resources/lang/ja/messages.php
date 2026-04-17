@@ -1,0 +1,21 @@
+<?php
+
+return [
+    'cannot-download-folder' => "フォルダをダウンロードすることはできません",
+    'no-files-uploaded' => "ファイルはアップロードされませんでした",
+    'no-preview-available' => "プレビューがありません",
+    'no-files-selected' => "ファイルが選択されていません|ファイルが選択されていません",
+    'cannot-select-file' => "ファイルを選択できませんでした",
+    'cannot-reorder-file' => "ファイルを並べ替えることができませんでした",
+    'not-eligble-for-artifact-regeneration' => "このファイルタイプはアーティファクトの再生成をサポートしていません",
+    'artefact-regeneration-confirmed' => "アーティファクトの再生成がキューに追加されました",
+    'artefact-file-count' => "1つのファイルに影響しました|:count個のファイルに影響しました",
+    'invalid-file-types' => "このファイルタイプは許可されていません|:count個のファイルタイプが許可されていません",
+    'files-uploaded-successfully' => "1つのファイルが正常にアップロードされました|:count個のファイルが正常にアップロードされました",
+    'files-skipped' => "1つのファイルがスキップされました|:count個のファイルがスキップされました",
+    'file-size-exceeded' => "ファイルが大きすぎます。最大サイズは :size です",
+    'unknown-error' => "不明なエラーが発生しました。もう一度お試しください。",
+    'empty-folder' => "このフォルダーはまだ空です",
+    'drag-or-add-files' => "ここにファイルをドラッグするか、右上隅のアイコンをクリックしてファイルを追加できます。",
+
+];

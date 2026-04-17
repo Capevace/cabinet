@@ -1,0 +1,21 @@
+<?php
+
+return [
+    'cannot-download-folder' => "لا يمكنك تنزيل مجلد",
+    'no-files-uploaded' => "لم يتم تحميل أي ملفات",
+    'no-preview-available' => "لا يوجد معاينة متاحة",
+    'no-files-selected' => "لم يتم تحديد ملف|لم يتم تحديد ملفات",
+    'cannot-select-file' => "تعذر تحديد الملف",
+    'cannot-reorder-file' => "تعذر إعادة ترتيب الملف",
+    'not-eligble-for-artifact-regeneration' => "نوع الملف لا يدعم تجديد القطع الأثرية",
+    'artefact-regeneration-confirmed' => "تم جدولة تجديد القطع الأثرية",
+    'artefact-file-count' => "ملف واحد متأثر|:count ملفات متأثرة",
+    'invalid-file-types' => "نوع هذا الملف غير مسموح به|:count أنواع ملفات غير مسموح بها",
+    'files-uploaded-successfully' => "تم تحميل ملف واحد بنجاح|:count ملفات تم تحميلها بنجاح",
+    'files-skipped' => "تم تخطي ملف واحد|تم تخطي :count ملفات",
+    'file-size-exceeded' => "الملف كبير جداً. الحد الأقصى للحجم هو :size",
+    'unknown-error' => "حدث خطأ غير معروف. يرجى المحاولة مرة أخرى.",
+    'empty-folder' => "هذا المجلد فارغ",
+    'drag-or-add-files' => "يمكنك سحب الملفات هنا أو النقر على الرمز في الزاوية اليمنى العليا لإضافة ملفات.",
+
+];

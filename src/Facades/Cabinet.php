@@ -41,6 +41,8 @@ use Closure;
  * @method static \Cabinet\Models\FileRef uploadAndAttachFromPath(string $source, string $path, \Cabinet\Models\Directory|\Cabinet\Folder $folder, ?\Illuminate\Database\Eloquent\Model $to = NULL, ?string $as = NULL, ?int $order = NULL)
  * @method static static syncMany(\Cabinet\HasFiles $record, string $relationship, \Illuminate\Support\Collection|array $files)
  * @method static static syncOne(\Cabinet\HasFiles $record, string $relationship, ?\Cabinet\File $file)
+ * @method static string generateDownloadUrl(\Cabinet\File $file, ?string $variant = NULL)
+ * @method static self generateDownloadUrlUsing(Closure $callback)
  */
 class Cabinet extends \Illuminate\Support\Facades\Facade
 {

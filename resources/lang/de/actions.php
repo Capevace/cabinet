@@ -17,5 +17,15 @@ return [
     'delete-folder' => 'Ordner löschen',
     'create-folder' => 'Neuer Ordner',
     'upload-file' => 'Datei hochladen',
+    'upload-files' => [
+        'label' => 'Dateien hochladen',
+        'type' => 'Dateityp',
+        'files' => 'Dateien',
+        'submit' => 'Hochladen',
+        'placeholder' => 'Dateityp auswählen',
+        'max-size' => 'Maximale Dateigröße: :value KB',
+        'max-size-any' => 'Maximale Dateigröße: :value',
+        'accepted-file-types' => 'Akzeptierte Dateitypen: :value',
+    ],
     'refresh-file' => 'Datei-Artefakte aktualisieren',
 ];

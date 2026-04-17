@@ -1,0 +1,32 @@
+<?php
+
+return [
+    'rename' => "重命名",
+    'share' => "共享",
+    'upload-file' => "上传文件",
+    'delete' => "删除",
+    'download' => "下载",
+    'move' => "移动",
+    'copy' => "复制",
+    'close' => "关闭",
+    'preview' => "预览",
+    'duplicate' => "复制",
+    'select-file' => "选择文件|选择文件",
+    'select-x-files' => "选择文件|选择 :value 个文件",
+    'select-no-files' => "未选择文件|未选择文件",
+    'copy-link' => "复制链接",
+    'delete-folder' => "删除文件夹",
+    'create-folder' => "创建文件夹",
+    'refresh-file' => "刷新文件构件",
+    'upload-files' => [
+        'label' => "上传文件",
+        'type' => "文件类型",
+        'files' => "文件",
+        'submit' => "上传",
+        'placeholder' => "选择文件类型",
+        'max-size' => "最大文件大小: :value KB",
+        'accepted-file-types' => "接受的文件类型: :value",
+        'max-size-any' => "最大文件大小: :value",
+    ],
+
+];
