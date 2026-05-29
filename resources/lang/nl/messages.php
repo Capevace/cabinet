@@ -18,4 +18,16 @@ return [
     'empty-folder' => "Deze map is nog leeg",
     'drag-or-add-files' => "U kunt hier bestanden naar slepen of op het pictogram rechtsboven klikken om bestanden toe te voegen.",
 
+    'drop-files-to-upload' => 'Drop files here to upload',
+    'locations' => 'Locations',
+    'selected' => 'selected',
+    'file-details' => 'File details',
+    'file-references' => 'Where is this file used?',
+    'no-references' => 'No references found',
+    'loading-references' => 'Loading references...',
+    'file-size' => 'File size',
+    'file-type' => 'Type',
+    'file-source' => 'Source',
+    'file-path' => 'Path',
+    'file-name' => 'Name',
 ];

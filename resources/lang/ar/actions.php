@@ -29,4 +29,8 @@ return [
         'max-size-any' => "الحد الأقصى لحجم الملف: :value",
     ],
 
+    'clear-selection' => 'Clear selection',
+    'view-grid' => 'Grid view',
+    'view-list' => 'List view',
+    'close-details' => 'Close details',
 ];

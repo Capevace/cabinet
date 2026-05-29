@@ -12,6 +12,7 @@ use Cabinet\Sources\Contracts\HasFilamentForm;
 use Cabinet\Sources\SpatieMediaSource;
 use Cabinet\Types\Audio;
 use Cabinet\Types\Document;
+use Cabinet\Types\DWG;
 use Cabinet\Types\Image;
 use Cabinet\Types\Other;
 use Cabinet\Types\PDF;
@@ -38,6 +39,7 @@ class Cabinet
         Audio::class,
         Document::class,
         PDF::class,
+        DWG::class,
         Other::class
     ];
 
@@ -143,9 +145,28 @@ class Cabinet
 
     public function determineFileTypeFromMime(string $mime): FileType
     {
+        return $this->determineFileType($mime, null);
+    }
+
+    public function determineFileType(string $mime, ?string $filename = null): FileType
+    {
+        // First try exact MIME match
         foreach ($this->fileTypes as $fileType) {
             if (array_search($mime, $fileType::supportedMimeTypes()) !== false) {
                 return app($fileType, ['mime' => $mime]);
+            }
+        }
+
+        // Fallback to extension mapping for generic or unknown MIME types
+        if ($filename !== null) {
+            $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+            $extensionMap = [
+                'dwg' => DWG::class,
+            ];
+
+            if (isset($extensionMap[$extension])) {
+                return app($extensionMap[$extension], ['mime' => $mime]);
             }
         }
 

@@ -133,21 +133,82 @@ trait References
         return $this;
     }
 
-//    public function reorder(HasFiles $record, string $relationship, int $from, int $to): static
-//    {
-//        DB::transaction(function () use ($record, $relationship, $from, $to) {
-//            $fileRefs = $record->{$relationship}()
-//                ->orderBy('attached_order')
-//                ->get();
-//
-//            // Explained:
-//            // 1. Remove the file from the from index
-//            // 2. Insert the file to the to index
-//            $fileRefs->splice($to, 0, $fileRefs->splice($from, 1));
-//
-//            $fileRefs->each(fn (FileRef $ref, int $index) => $ref->update(['attached_order' => $index]));
-//        });
-//
-//        return $this;
-//    }
+    /**
+     * Resolve human-readable references for a file.
+     *
+     * Returns an array of references that can be rendered in the Finder
+     * detail sidebar. Each reference contains a label, optional URL, icon,
+     * type label and thumbnail.
+     *
+     * Host applications can customise the output by implementing
+     * getCabinetReferenceLabel(), getCabinetReferenceUrl(),
+     * getCabinetReferenceIcon(), getCabinetReferenceTypeLabel()
+     * and/or getCabinetReferenceThumbnailUrl() on the models that are
+     * attached to the file.
+     *
+     * @return array<array{label: string, url: string|null, icon: string|null, typeLabel: string|null, thumbnailUrl: string|null}>
+     */
+    public function resolveFileReferences(File $file): array
+    {
+        $references = $this->references($file);
+
+        return $references
+            ->map(function (FileRef $ref) {
+                $model = $ref->attachedTo;
+
+                if ($model === null) {
+                    return null;
+                }
+
+                $label = null;
+                $url = null;
+                $icon = null;
+                $typeLabel = null;
+                $thumbnailUrl = null;
+
+                if (method_exists($model, 'getCabinetReferenceLabel')) {
+                    $label = $model->getCabinetReferenceLabel();
+                }
+
+                if (method_exists($model, 'getCabinetReferenceUrl')) {
+                    $url = $model->getCabinetReferenceUrl();
+                }
+
+                if (method_exists($model, 'getCabinetReferenceIcon')) {
+                    $icon = $model->getCabinetReferenceIcon();
+                }
+
+                if (method_exists($model, 'getCabinetReferenceTypeLabel')) {
+                    $typeLabel = $model->getCabinetReferenceTypeLabel();
+                }
+
+                if (method_exists($model, 'getCabinetReferenceThumbnailUrl')) {
+                    $thumbnailUrl = $model->getCabinetReferenceThumbnailUrl();
+                }
+
+                if ($label === null) {
+                    foreach (['name', 'title', 'label'] as $attribute) {
+                        if (isset($model->{$attribute})) {
+                            $label = $model->{$attribute};
+                            break;
+                        }
+                    }
+                }
+
+                if ($label === null) {
+                    $label = class_basename($model) . ' #' . $model->getKey();
+                }
+
+                return [
+                    'label'        => (string) $label,
+                    'url'          => $url,
+                    'icon'         => $icon,
+                    'typeLabel'    => $typeLabel,
+                    'thumbnailUrl' => $thumbnailUrl,
+                ];
+            })
+            ->filter()
+            ->values()
+            ->all();
+    }
 }

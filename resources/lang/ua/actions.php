@@ -29,4 +29,8 @@ return [
         'max-size-any' => "Максимальний розмір файлу: :value",
     ],
 
+    'clear-selection' => 'Clear selection',
+    'view-grid' => 'Grid view',
+    'view-list' => 'List view',
+    'close-details' => 'Close details',
 ];

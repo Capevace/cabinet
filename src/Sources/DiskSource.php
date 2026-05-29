@@ -8,6 +8,7 @@ use Cabinet\Folder;
 use Cabinet\Models\Directory;
 use Cabinet\Models\FileRef;
 use Cabinet\Query;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 
@@ -49,12 +50,13 @@ class DiskSource implements \Cabinet\Source
         return new File(
             id: "{$this->disk}:{$pathHash}",
             source: static::TYPE,
-            type: Cabinet::determineFileTypeFromMime($mimeType),
+            type: Cabinet::determineFileType($mimeType, $filename),
             name: str($filename)->beforeLast('.')->toString(),
             slug: $filename,
             mimeType: $mimeType,
             size: $this->getDisk()->size($path),
             previewUrl: $this->getDisk()->url($path),
+            createdAt: Carbon::createFromTimestamp($this->getDisk()->lastModified($path)),
         );
     }
 

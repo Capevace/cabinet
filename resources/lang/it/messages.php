@@ -18,4 +18,16 @@ return [
     'empty-folder' => "Questa cartella è ancora vuota",
     'drag-or-add-files' => "Puoi trascinare i file qui o fare clic sull'icona in alto a destra per aggiungere file.",
 
+    'drop-files-to-upload' => 'Drop files here to upload',
+    'locations' => 'Locations',
+    'selected' => 'selected',
+    'file-details' => 'File details',
+    'file-references' => 'Where is this file used?',
+    'no-references' => 'No references found',
+    'loading-references' => 'Loading references...',
+    'file-size' => 'File size',
+    'file-type' => 'Type',
+    'file-source' => 'Source',
+    'file-path' => 'Path',
+    'file-name' => 'Name',
 ];

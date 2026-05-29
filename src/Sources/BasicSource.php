@@ -31,12 +31,13 @@ class BasicSource implements \Cabinet\Source
         return new File(
             id: (string) $media->id,
             source: self::TYPE,
-            type: Cabinet::determineFileTypeFromMime($media->mime_type),
+            type: Cabinet::determineFileType($media->mime_type, $media->file_name),
             name: $media->name,
             slug: $media->slug,
             mimeType: $media->mime_type,
             size: $media->size,
             previewUrl: $media->getFullUrl(),
+            createdAt: $media->created_at ? \Carbon\Carbon::parse($media->created_at) : null,
         );
     }
 

@@ -9,6 +9,13 @@ return [
 
     'max_file_size_kb' => 1024 * 10, // 10MB
 
+    'file' => [
+        'enabled' => true,
+        'expires_after_minutes' => 60 * 24 * 2, // 2 days
+        'route_prefix' => '/files',
+        'middleware' => ['web'],
+    ],
+
     'download' => [
         'route' => '/cabinet/download',
         'middleware' => ['web', 'signed'],
@@ -25,6 +32,7 @@ return [
 
         'default_conversion' => '',
         'preview_conversion' => 'thumbnail',
+        'tiny_preview_conversion' => 'tiny-thumbnail',
 		'default_expiration_minutes' => 60,
     ]
 ];

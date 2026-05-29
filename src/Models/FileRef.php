@@ -62,4 +62,9 @@ class FileRef extends Model
     {
         return $this->morphTo('model');
     }
+
+    public function attachedTo(): MorphTo
+    {
+        return $this->morphTo('attached_to');
+    }
 }

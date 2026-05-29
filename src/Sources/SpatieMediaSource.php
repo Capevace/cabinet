@@ -71,7 +71,7 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, CanBeDownloa
     public function transformMedia(Media $media, ?DateTimeInterface $expiresAt = null): File
     {
         $thumbnailConversion = $this->getThumbnailConversion();
-        $type = Cabinet::determineFileTypeFromMime($media->mime_type);
+        $type = Cabinet::determineFileType($media->mime_type, $media->file_name);
 
         return new File(
             id: (string) $media->getKey(),
@@ -86,7 +86,8 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, CanBeDownloa
             previewUrl: $media->hasGeneratedConversion($thumbnailConversion) || $type->slug() !== 'image'
                 ? $media->getTemporaryUrl(expiration: $expiresAt ?? $this->getDefaultExpiration(), conversionName: $thumbnailConversion)
                 : $media->getTemporaryUrl(expiration: $expiresAt ?? $this->getDefaultExpiration()),
-            model: $media
+            model: $media,
+            createdAt: $media->created_at ? Carbon::parse($media->created_at) : null,
         );
     }
 

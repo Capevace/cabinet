@@ -28,4 +28,8 @@ return [
         'accepted-file-types' => 'Akzeptierte Dateitypen: :value',
     ],
     'refresh-file' => 'Datei-Artefakte aktualisieren',
+    'clear-selection' => 'Auswahl aufheben',
+    'view-grid' => 'Rasteransicht',
+    'view-list' => 'Listenansicht',
+    'close-details' => 'Details schließen',
 ];

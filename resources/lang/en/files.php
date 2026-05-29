@@ -10,4 +10,5 @@ return [
     'directory' => 'Folder',
     'other' => 'Other',
     'pdf' => 'PDF',
+    'dwg' => 'AutoCAD DWG',
 ];

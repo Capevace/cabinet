@@ -29,4 +29,8 @@ return [
         'max-size-any' => "Tamaño máximo de archivo: :value",
     ],
 
+    'clear-selection' => 'Clear selection',
+    'view-grid' => 'Grid view',
+    'view-list' => 'List view',
+    'close-details' => 'Close details',
 ];

@@ -18,4 +18,16 @@ return [
     'empty-folder' => "هذا المجلد فارغ",
     'drag-or-add-files' => "يمكنك سحب الملفات هنا أو النقر على الرمز في الزاوية اليمنى العليا لإضافة ملفات.",
 
+    'drop-files-to-upload' => 'Drop files here to upload',
+    'locations' => 'Locations',
+    'selected' => 'selected',
+    'file-details' => 'File details',
+    'file-references' => 'Where is this file used?',
+    'no-references' => 'No references found',
+    'loading-references' => 'Loading references...',
+    'file-size' => 'File size',
+    'file-type' => 'Type',
+    'file-source' => 'Source',
+    'file-path' => 'Path',
+    'file-name' => 'Name',
 ];

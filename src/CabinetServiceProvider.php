@@ -27,6 +27,7 @@ class CabinetServiceProvider extends PackageServiceProvider
             ->hasConfigFile()
             ->hasTranslations()
             ->hasRoutes('download')
+            ->hasRoutes('files')
             ->hasMigrations(
                 'create_cabinet_directories_table',
                 'create_cabinet_basic_files_table',

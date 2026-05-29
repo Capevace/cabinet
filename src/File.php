@@ -2,6 +2,7 @@
 
 namespace Cabinet;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 readonly class File
@@ -17,7 +18,8 @@ readonly class File
         public ?string  $previewUrl,
         public ?string  $icon = null,
         public ?array   $attributes = null,
-		public ?Model $model = null,
+        public ?Model   $model = null,
+        public ?Carbon  $createdAt = null,
     ) {}
 
     public function url(?string $variant = null): ?string
@@ -105,6 +107,15 @@ readonly class File
             'application/x-bzip2' => 'BZIP2',
             'application/x-gzip' => 'GZIP',
             'application/x-xz' => 'XZ',
+
+            'image/vnd.dwg' => 'DWG',
+            'application/vnd.dwg' => 'DWG',
+            'application/acad' => 'AutoCAD',
+            'application/x-acad' => 'AutoCAD',
+            'application/autocad' => 'AutoCAD',
+            'application/dwg' => 'DWG',
+            'drawing/x-dwg' => 'DWG',
+
             default => $this->mimeType,
         };
     }
@@ -117,6 +128,19 @@ readonly class File
             'source' => $this->source,
             'name' => $this->name
         ];
+    }
+
+    public function formattedCreatedAt(): string
+    {
+        if ($this->createdAt === null) {
+            return '—';
+        }
+
+        if ($this->createdAt->isToday()) {
+            return __('cabinet::messages.today');
+        }
+
+        return $this->createdAt->format('M j, Y');
     }
 
     public function humanSize(): string

@@ -18,4 +18,16 @@ return [
     'empty-folder' => "此文件夹为空",
     'drag-or-add-files' => "您可以将文件拖到此处，或点击右上角的图标添加文件。",
 
+    'drop-files-to-upload' => 'Drop files here to upload',
+    'locations' => 'Locations',
+    'selected' => 'selected',
+    'file-details' => 'File details',
+    'file-references' => 'Where is this file used?',
+    'no-references' => 'No references found',
+    'loading-references' => 'Loading references...',
+    'file-size' => 'File size',
+    'file-type' => 'Type',
+    'file-source' => 'Source',
+    'file-path' => 'Path',
+    'file-name' => 'Name',
 ];

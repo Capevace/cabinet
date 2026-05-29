@@ -18,4 +18,16 @@ return [
     'empty-folder' => "Bu klas;r hen;z bo;",
     'drag-or-add-files' => "Dosyalar; buraya s;r;kleyebilir veya dosya eklemek i;in sa; ;st k;nedeki simgeye t;klayabilirsiniz.",
 
+    'drop-files-to-upload' => 'Drop files here to upload',
+    'locations' => 'Locations',
+    'selected' => 'selected',
+    'file-details' => 'File details',
+    'file-references' => 'Where is this file used?',
+    'no-references' => 'No references found',
+    'loading-references' => 'Loading references...',
+    'file-size' => 'File size',
+    'file-type' => 'Type',
+    'file-source' => 'Source',
+    'file-path' => 'Path',
+    'file-name' => 'Name',
 ];
