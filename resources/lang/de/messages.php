@@ -1,8 +1,6 @@
 <?php
 
 return [
-    'empty-folder' => 'Dieser Ordner ist noch leer',
-    'drag-or-add-files' => 'Sie können Dateien hierher ziehen oder oben rechts auf das Symbol klicken, um Dateien hinzuzufügen.',
     'cannot-download-folder' => 'Du kannst keinen Ordner herunterladen',
     'no-files-uploaded' => 'Es wurden keine Dateien hochgeladen',
     'no-preview-available' => 'Keine Vorschau verfügbar',
@@ -17,6 +15,8 @@ return [
     'files-skipped' => 'Eine Datei wurde übersprungen|:count Dateien wurden übersprungen',
     'file-size-exceeded' => 'Datei ist zu groß. Maximale Größe beträgt :size',
     'unknown-error' => 'Ein unbekannter Fehler ist aufgetreten. Bitte versuche es erneut.',
+    'empty-folder' => 'Dieser Ordner ist noch leer',
+    'drag-or-add-files' => 'Sie können Dateien hierher ziehen oder oben rechts auf das Symbol klicken, um Dateien hinzuzufügen.',
     'drop-files-to-upload' => 'Dateien hier ablegen, um sie hochzuladen',
     'locations' => 'Orte',
     'selected' => 'ausgewählt',
@@ -29,4 +29,7 @@ return [
     'file-source' => 'Quelle',
     'file-path' => 'Pfad',
     'file-name' => 'Name',
+    'file-created' => 'Created',
+    'today' => 'Today',
+    'search-files' => 'Search files...',
 ];

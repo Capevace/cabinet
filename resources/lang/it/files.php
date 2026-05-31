@@ -1,14 +1,14 @@
 <?php
 
 return [
-    'files' => "File",
-    'image' => "Immagine",
-    'video' => "Video",
-    'document' => "Documento",
-    'folder' => "Cartella",
-    'directory' => "Cartella",
-    'other' => "Altro",
-    'pdf' => "PDF",
-    'file' => "File",
-
+    'file' => 'File',
+    'files' => 'File',
+    'image' => 'Immagine',
+    'video' => 'Video',
+    'document' => 'Documento',
+    'folder' => 'Cartella',
+    'directory' => 'Cartella',
+    'other' => 'Altro',
+    'pdf' => 'PDF',
+    'dwg' => 'AutoCAD DWG',
 ];
