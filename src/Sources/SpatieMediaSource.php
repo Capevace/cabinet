@@ -202,7 +202,8 @@ class SpatieMediaSource implements \Cabinet\Source, AcceptsUploads, CanBeDownloa
         $mediaModel = $this->getMediaModel();
         $morphClass = (new $mediaModel)->getMorphClass();
 
-        $query = FileRef::where('model_type', $morphClass)
+        $query = FileRef::with(['attachedTo'])
+            ->where('model_type', $morphClass)
             ->where('model_id', $file->id);
 
         if ($limit !== null) {

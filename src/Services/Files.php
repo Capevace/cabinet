@@ -2,6 +2,7 @@
 
 namespace Cabinet\Services;
 
+use Cabinet\Exceptions\FileNotFound;
 use Cabinet\Exceptions\WrongSource;
 use Cabinet\File;
 use Cabinet\Sources\Contracts\CanBeDownloaded;
@@ -29,25 +30,32 @@ trait Files
         return $this;
     }
 
-    public function generateDownloadUrl(File $file, ?string $variant = null): string
-    {
+    public function generateDownloadUrl(
+        File $file,
+        ?string $variant = null,
+    ): string {
         if ($this->generateDownloadUrlUsing) {
             return ($this->generateDownloadUrlUsing)($file, $variant);
         }
 
         return URL::temporarySignedRoute(
-            name: 'cabinet.download',
+            name: "cabinet.download",
             parameters: array_filter([
-                'source' => $file->source,
-                'file_id' => $file->id,
-                'variant' => $variant,
+                "source" => $file->source,
+                "file_id" => $file->id,
+                "variant" => $variant,
             ]),
-            expiration: now()->addMinutes(config('cabinet.download.expires_after_minutes')),
+            expiration: now()->addMinutes(
+                config("cabinet.download.expires_after_minutes"),
+            ),
         );
     }
 
-    public function file(string $sourceName, string $idOrPath, ?string $disk = null): ?File
-    {
+    public function file(
+        string $sourceName,
+        string $idOrPath,
+        ?string $disk = null,
+    ): ?File {
         $source = $this->getSource($sourceName);
         $interfaces = class_implements($source::class);
 
@@ -55,24 +63,34 @@ trait Files
         $supportsPathLookup = in_array(FindWithPath::class, $interfaces);
 
         if (!$supportsIdLookup && !$supportsPathLookup) {
-            throw new WrongSource("{$sourceName} source does not implement file lookup");
-        } else if ($disk === null && !$supportsIdLookup) {
-            throw new WrongSource("{$sourceName} source does not support id lookup");
-        } else if ($disk !== null && !$supportsPathLookup) {
-            throw new WrongSource("{$sourceName} source does not support path lookup");
+            throw new WrongSource(
+                "{$sourceName} source does not implement file lookup",
+            );
+        } elseif ($disk === null && !$supportsIdLookup) {
+            throw new WrongSource(
+                "{$sourceName} source does not support id lookup",
+            );
+        } elseif ($disk !== null && !$supportsPathLookup) {
+            throw new WrongSource(
+                "{$sourceName} source does not support path lookup",
+            );
         }
 
-        if ($supportsIdLookup) {
-            /** @var FindWithId $source */
+        try {
+            if ($supportsIdLookup) {
+                /** @var FindWithId $source */
 
-            return $source->findWithId($idOrPath);
-        } else if ($supportsPathLookup) {
-            /** @var FindWithPath $source */
+                return $source->findWithId($idOrPath);
+            } elseif ($supportsPathLookup) {
+                /** @var FindWithPath $source */
 
-            return $source->findWithPath($idOrPath, $disk);
+                return $source->findWithPath($idOrPath, $disk);
+            }
+
+            return null;
+        } catch (FileNotFound $e) {
+            return null;
         }
-
-        return null;
     }
 
     /**
@@ -83,14 +101,19 @@ trait Files
         $source = $this->getSource($file->source);
 
         if (!class_implements($source::class, HasPath::class)) {
-            throw new Exception("Source {$file->source} does not implement " . HasPath::class);
+            throw new Exception(
+                "Source {$file->source} does not implement " . HasPath::class,
+            );
         }
 
         return $source->path($file);
     }
 
-    public function generateFileUrl(File $file, ?string $variant = null, ?DateTimeInterface $expiresAt = null): ?string
-    {
+    public function generateFileUrl(
+        File $file,
+        ?string $variant = null,
+        ?DateTimeInterface $expiresAt = null,
+    ): ?string {
         $source = $this->getSource($file->source);
 
         if (!class_implements($source::class, CanGenerateUrls::class)) {
@@ -101,8 +124,10 @@ trait Files
         return $source->generateUrl($file, $variant, $expiresAt);
     }
 
-    public function generateFilePath(File $file, ?string $variant = null): ?string
-    {
+    public function generateFilePath(
+        File $file,
+        ?string $variant = null,
+    ): ?string {
         $source = $this->getSource($file->source);
 
         if (!class_implements($source::class, HasPath::class)) {
@@ -125,16 +150,18 @@ trait Files
         return $source->getFileModel($file);
     }
 
-    public function download(File $file): \Symfony\Component\HttpFoundation\Response
-    {
+    public function download(
+        File $file,
+    ): \Symfony\Component\HttpFoundation\Response {
         $source = $this->getSource($file->source);
 
         if (!class_implements($source::class, CanBeDownloaded::class)) {
-            throw new \Exception("Source {$file->source} does not implement " . CanBeDownloaded::class);
+            throw new \Exception(
+                "Source {$file->source} does not implement " .
+                    CanBeDownloaded::class,
+            );
         }
 
         return $source->download($file);
     }
-
-
 }
