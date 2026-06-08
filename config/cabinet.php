@@ -21,6 +21,10 @@ return [
         'middleware' => ['web', 'signed'],
         'expires_after_minutes' => 5,
     ],
+
+    // Date format used when displaying file creation dates.
+    // Defaults to European style (day month year).
+    'date_format' => 'd. F Y',
  
     // Set the collection files will be uplaoded to when using spatie/medialibrary.
     // Fallback is default, which is also used by the package internally.

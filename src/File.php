@@ -140,7 +140,7 @@ readonly class File
             return __('cabinet::messages.today');
         }
 
-        return $this->createdAt->format('M j, Y');
+        return $this->createdAt->translatedFormat(config('cabinet.date_format', 'd. F Y'));
     }
 
     public function humanSize(): string

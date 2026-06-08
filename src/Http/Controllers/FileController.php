@@ -7,6 +7,7 @@ use Cabinet\RollingSignature\Signature;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class FileController
 {
@@ -132,5 +133,49 @@ class FileController
         }
 
         return $this->redirectToUrl($url);
+    }
+
+    /**
+     * Stream the original file inline for embedding in iframes.
+     *
+     * Forces Content-Disposition: inline so the browser renders the file
+     * instead of downloading it. The response is streamed in chunks to
+     * avoid loading the entire file into memory.
+     */
+    public function preview(Request $request, string $source, string $id): Response|StreamedResponse
+    {
+        $this->validateSignature($request);
+
+        $file = $this->resolveFile($source, $id);
+        $url = $this->generateUrl($file);
+
+        if ($url === null) {
+            abort(404, 'File not found');
+        }
+
+        $handle = fopen($url, 'r');
+
+        if ($handle === false) {
+            abort(404, 'File not found');
+        }
+
+        $filename = str($file->name)
+            ->replace('\'', '')
+            ->append('.')
+            ->append(str($file->slug)->afterLast('.')->toString())
+            ->toString();
+
+        return response()->stream(function () use ($handle) {
+            while (!feof($handle)) {
+                echo fread($handle, 8192);
+                flush();
+            }
+
+            fclose($handle);
+        }, 200, [
+            'Content-Type' => $file->mimeType,
+            'Content-Disposition' => 'inline; filename="' . $filename . '"',
+            'Cache-Control' => self::CACHE_CONTROL_FOUND,
+        ]);
     }
 }

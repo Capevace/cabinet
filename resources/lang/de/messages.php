@@ -29,7 +29,7 @@ return [
     'file-source' => 'Quelle',
     'file-path' => 'Pfad',
     'file-name' => 'Name',
-    'file-created' => 'Created',
-    'today' => 'Today',
-    'search-files' => 'Search files...',
+    'file-created' => 'Erstellt',
+    'today' => 'Heute',
+    'search-files' => 'Dateien suchen...',
 ];
