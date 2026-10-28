@@ -31,5 +31,8 @@ return [
     'file-name' => 'Name',
     'file-created' => 'Erstellt',
     'today' => 'Heute',
+    'upload-queue' => 'Uploads',
+    'cancel-upload' => 'Upload abbrechen',
+    'cancel-all-uploads' => 'Alle Uploads abbrechen',
     'search-files' => 'Dateien suchen...',
 ];

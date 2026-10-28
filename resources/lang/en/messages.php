@@ -31,6 +31,9 @@ return [
     'file-name' => "Name",
     'file-created' => "Created",
     'today' => "Today",
+    'upload-queue' => 'Uploads',
+    'cancel-upload' => 'Cancel upload',
+    'cancel-all-uploads' => 'Cancel all uploads',
     'search-files' => "Search files...",
 
 ];

@@ -65,6 +65,11 @@ class FileRef extends Model
 
     public function attachedTo(): MorphTo
     {
-        return $this->morphTo('attached_to');
+        // The relation name (first argument) has to be camelCase like the
+        // method, while the columns stay snake_case. Naming it 'attached_to'
+        // made eager loading with `with('attachedTo')` store the model under a
+        // different key than `$ref->attachedTo` reads, so every reference
+        // resolved to null.
+        return $this->morphTo(__FUNCTION__, 'attached_to_type', 'attached_to_id');
     }
 }
